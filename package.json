@@ -12,11 +12,14 @@
     "@nextui-org/react": "^2.4.6",
     "@nextui-org/system": "^2.2.5",
     "@nextui-org/theme": "^2.2.9",
+    "@react-oauth/google": "^0.12.1",
     "classnames": "^2.5.1",
+    "dotenv": "^16.4.5",
     "framer-motion": "^11.3.8",
     "next": "14.2.5",
     "react": "^18",
     "react-dom": "^18",
+    "react-icons": "^5.2.1",
     "sass": "^1.77.8"
   },
   "devDependencies": {
