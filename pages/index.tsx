@@ -1,13 +1,14 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import { Button } from "@nextui-org/react";
+import MainLayout from "@/src/components/layouts/MainLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
     <div>
-      <Button>Click me</Button>
+      <MainLayout>
+        <h1>a</h1>
+      </MainLayout>
     </div>
   );
 }

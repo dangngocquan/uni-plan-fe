@@ -1,0 +1,14 @@
+.header {
+  background-color: #0070f3;
+  padding: 10px 20px;
+  color: white;
+}
+
+.header__logo {
+  font-weight: bold;
+}
+
+.header__nav {
+  display: flex;
+  gap: 15px;
+}
