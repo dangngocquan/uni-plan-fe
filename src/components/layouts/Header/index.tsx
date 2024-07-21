@@ -6,13 +6,22 @@ import {
   NavbarItem,
   Link,
   Button,
+  Avatar,
+  AvatarIcon,
 } from "@nextui-org/react";
 import { AcmeLogo } from "./AcmeLogo";
 import { useRouter } from "next/router";
+import {
+  getFromSessionStorage,
+  SESSION_STORAGE_KEYS,
+} from "@/src/utils/sessionStorage";
 
 export default function Header() {
   const router = useRouter();
   const [navKey, setNavKey] = useState("");
+  const [accessToken, setAccessToken] = useState(
+    getFromSessionStorage(SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY)
+  );
   const navigations = [
     {
       text: "Home",
@@ -73,14 +82,26 @@ export default function Header() {
         })}
       </NavbarContent>
       <NavbarContent justify="end">
-        <NavbarItem className="lg:flex">
-          <Link href="#">Login</Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
-            Sign Up
-          </Button>
-        </NavbarItem>
+        {(!accessToken && (
+          <NavbarItem>
+            <Link href={"/auth/signin"} className="pr-[1rem]">
+              Login
+            </Link>
+            <Button as={Link} color="primary" href="#" variant="flat">
+              <Link href={"/auth/signup"}>Sign Up</Link>
+            </Button>
+          </NavbarItem>
+        )) || (
+          <NavbarItem>
+            <Avatar
+              icon={<AvatarIcon />}
+              classNames={{
+                base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B]",
+                icon: "text-black/80",
+              }}
+            />
+          </NavbarItem>
+        )}
       </NavbarContent>
     </Navbar>
   );
