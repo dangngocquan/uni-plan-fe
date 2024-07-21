@@ -1,13 +1,19 @@
-import Image from "next/image";
 import { Inter } from "next/font/google";
-import { Button } from "@nextui-org/react";
+import MainLayout from "@/src/components/layouts/MainLayout";
+import dynamic from "next/dynamic";
+import Loading from "@/src/components/Loading";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const LandingPage = dynamic(() => import("@/src/components/Landing"), {
+  ssr: false,
+  loading: () => <Loading></Loading>,
+});
 
 export default function Home() {
   return (
     <div>
-      <Button>Click me</Button>
+      <LandingPage></LandingPage>
     </div>
   );
 }
