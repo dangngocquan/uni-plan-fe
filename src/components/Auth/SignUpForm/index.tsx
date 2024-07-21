@@ -23,16 +23,24 @@ import { RiSendPlaneFill } from "react-icons/ri";
 import { validateEmail } from "@/src/utils/helper";
 import { AiFillHome } from "react-icons/ai";
 
-const SignInForm = () => {
+const SignUpForm = () => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isVisible2, setIsVisible2] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const toggleVisibility2 = () => setIsVisible2(!isVisible2);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
 
-  const checkValidSubmit = () => {
+  const checkValidRegister = () => {
+    if (name == "") {
+      setMessage("Name is required");
+      return false;
+    }
     if (email == "") {
       setMessage("Email is required");
       return false;
@@ -45,16 +53,19 @@ const SignInForm = () => {
       setMessage("Password is required");
       return false;
     }
+    if (confirmPassword != password) {
+      setMessage("Confirm password is not matching with password");
+      return false;
+    }
     return true;
   };
 
   const submit = () => {
-    if (!checkValidSubmit()) {
+    if (!checkValidRegister()) {
       return;
     }
     setIsSubmiting(true);
-    setMessage("");
-    REQUEST.AUTH_SIGN_IN(email, password)
+    REQUEST.AUTH_SIGN_UP(name, email, password)
       .then((response) => response.json())
       .then((data) => {
         if (data.message) {
@@ -69,12 +80,17 @@ const SignInForm = () => {
             SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
             data.refreshToken
           );
-          router.push("/");
+          router.push("/auth/verify-email");
         }
       })
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setName(value);
   };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +101,11 @@ const SignInForm = () => {
   const handlePasssword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target as HTMLInputElement;
     setPassword(value);
+  };
+
+  const handleConfirmPasssword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setConfirmPassword(value);
   };
 
   const authGoogle = useGoogleLogin({
@@ -115,16 +136,23 @@ const SignInForm = () => {
     <div className={classNames(styles.wrapper)}>
       <div className={classNames(styles.card)}>
         <Card
-          className="max-w-[100%] min-w-[400px] max-h-[100%] min-h-[500px] px-6 py-6"
+          className="max-w-[100%] min-w-[400px] max-h-[100%] min-h-[400px] px-6 py-6"
           shadow="lg"
         >
           <CardHeader className="flex-col uppercase text-2xl justify-center align-center">
             <Button startContent={<AiFillHome/>} className="mr-auto mb-10">
               <Link href={"/"}>Home</Link>
             </Button>
-            <p className="font-bold">Sign In</p>
+            <p className="font-bold">Sign Up</p>
           </CardHeader>
           <CardBody className="pt-6">
+            <Input
+              type="text"
+              color="primary"
+              label="Name"
+              variant="underlined"
+              onChange={handleName}
+            />
             <Input
               type="email"
               color="primary"
@@ -153,12 +181,28 @@ const SignInForm = () => {
               type={isVisible ? "text" : "password"}
               onChange={handlePasssword}
             />
-            <Link
-              className="transition-all text-xs text-right pt-1 hover:text-purple-500"
-              href={"/auth/forgot-password"}
-            >
-              Forgot pasword?
-            </Link>
+
+            <Input
+              label="Confirm Password"
+              variant="underlined"
+              color="primary"
+              endContent={
+                <button
+                  className="focus:outline-none"
+                  type="button"
+                  onClick={toggleVisibility2}
+                  aria-label="toggle password visibility"
+                >
+                  {isVisible2 ? (
+                    <FaEye className="text-2xl text-default-400 pointer-events-none" />
+                  ) : (
+                    <FaEyeSlash className="text-2xl text-default-400 pointer-events-none" />
+                  )}
+                </button>
+              }
+              type={isVisible2 ? "text" : "password"}
+              onChange={handleConfirmPasssword}
+            />
           </CardBody>
           <p className="pt-2 text-center text-red-500 text-xs min-h-[2rem]">
             {message}
@@ -183,15 +227,15 @@ const SignInForm = () => {
               startContent={<FaGoogle />}
               className="min-w-[80%]"
             >
-              Sign in with Google
+              Sign Up with Google
             </Button>
             <small className="pt-6">
-              Don't have an account?{" "}
+              Already have an account?{" "}
               <Link
-                href={"/auth/signup"}
+                href={"/auth/signin"}
                 className="font-bold transition-all hover:text-purple-500"
               >
-                Sign up
+                Login
               </Link>
             </small>
           </CardFooter>
@@ -200,4 +244,4 @@ const SignInForm = () => {
     </div>
   );
 };
-export default SignInForm;
+export default SignUpForm;

@@ -54,3 +54,30 @@ export const authVerifySignUp = (token: string) => {
     }),
   });
 };
+
+export const authForgotPassword = (email: string) => {
+  return fetch(API_ROUTES.authForgotPassword, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({
+      email: `${email}`,
+    }),
+  });
+};
+
+export const authResetPassword = (token: string, newPassword: string) => {
+  return fetch(API_ROUTES.authResetPassword, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({
+      token: token,
+      newPassword: `${newPassword}`,
+    }),
+  });
+};
