@@ -6,6 +6,7 @@ import {
   authSignUp,
   authVerifySignUp,
 } from "./auth";
+import { getMajors } from "./major";
 import { getSchool } from "./school";
 
 export const REQUEST = {
@@ -16,4 +17,5 @@ export const REQUEST = {
   AUTH_FORGOT_PASSWORD: authForgotPassword,
   AUTH_RESET_PASSWORD: authResetPassword,
   GET_SCHOOL: getSchool,
+  GET_MAJORS: getMajors,
 };

@@ -25,7 +25,7 @@ export default function Header() {
   const navigations = [
     {
       text: "Home",
-      link: "#",
+      link: "/",
     },
     {
       text: "Features",
