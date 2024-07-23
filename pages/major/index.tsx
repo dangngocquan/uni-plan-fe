@@ -4,15 +4,15 @@ import Loading from "@/src/components/Loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const LandingPage = dynamic(() => import("@/src/components/Landing"), {
+const MajorPage = dynamic(() => import("@/src/components/Major"), {
   ssr: false,
   loading: () => <Loading></Loading>,
 });
 
-export default function Home() {
+export default function HomeMajorPage() {
   return (
     <div>
-      <LandingPage></LandingPage>
+      <MajorPage schoolId={null}></MajorPage>
     </div>
   );
 }

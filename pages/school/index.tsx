@@ -4,15 +4,15 @@ import Loading from "@/src/components/Loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const LandingPage = dynamic(() => import("@/src/components/Landing"), {
+const SchoolPage = dynamic(() => import("@/src/components/School"), {
   ssr: false,
   loading: () => <Loading></Loading>,
 });
 
-export default function Home() {
+export default function HomeSchoolPage() {
   return (
     <div>
-      <LandingPage></LandingPage>
+      <SchoolPage></SchoolPage>
     </div>
   );
 }
