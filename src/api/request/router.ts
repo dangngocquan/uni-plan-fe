@@ -9,6 +9,7 @@ const API_ROUTES = {
   authForgotPassword: `${apiConfig.ROOT_API}/api/auth/forgot-password`,
   authResetPassword: `${apiConfig.ROOT_API}/api/auth/reset-password`,
   getSchool: `${apiConfig.ROOT_API}/api/school`,
+  getMajors: `${apiConfig.ROOT_API}/api/major`,
 };
 
 export default API_ROUTES;
