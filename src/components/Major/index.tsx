@@ -14,7 +14,6 @@ import {
   Input,
   Pagination,
 } from "@nextui-org/react";
-import { IoSchool } from "react-icons/io5";
 import { FaSearch } from "react-icons/fa";
 import { ResponseGetMajor } from "@/src/api/response/major";
 import { TbActivity } from "react-icons/tb";
