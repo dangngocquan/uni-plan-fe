@@ -1,9 +1,14 @@
 import MainLayout from "../layouts/MainLayout";
+import About from "./About";
+import HeroSection from "./HeroSection";
 
 const LandingPage = () => {
   return (
     <div>
-      <MainLayout>{"a"}</MainLayout>
+      <MainLayout>
+        <HeroSection />
+        <About/>
+      </MainLayout>
     </div>
   );
 };
