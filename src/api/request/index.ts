@@ -1,3 +1,4 @@
+import { adminAuthLogin } from "./admin";
 import {
   authForgotPassword,
   authGoogle,
@@ -18,4 +19,5 @@ export const REQUEST = {
   AUTH_RESET_PASSWORD: authResetPassword,
   GET_SCHOOL: getSchool,
   GET_MAJORS: getMajors,
+  ADMIN_AUTH_LOGIN: adminAuthLogin,
 };

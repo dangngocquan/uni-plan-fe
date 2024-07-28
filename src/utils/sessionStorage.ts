@@ -18,6 +18,9 @@ export const removeFromSessionStorage = (key: string) => {
 };
 
 export const SESSION_STORAGE_KEYS = {
-  ACCESS_TOKEN_KEY: "accessToken",
-  REFRESH_TOKEN_KEY: "refreshToken",
+  ACCESS_TOKEN_KEY: "univerplan-accessToken",
+  REFRESH_TOKEN_KEY: "univerplan-refreshToken",
+  ADMIN_ACCESS_TOKEN_KEY: "univerplan-admin-accessToken",
+  ADMIN_REFRESH_TOKEN_KEY: "univerplan-admin-refreshToken",
+
 };

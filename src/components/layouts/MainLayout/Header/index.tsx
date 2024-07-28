@@ -8,8 +8,11 @@ import {
   Button,
   Avatar,
   AvatarIcon,
+  NavbarMenu,
+  NavbarMenuItem,
+  NavbarMenuToggle,
 } from "@nextui-org/react";
-import { AcmeLogo } from "./AcmeLogo";
+import { AcmeLogo } from "../../../UI/AcmeLogo";
 import { useRouter } from "next/router";
 import {
   getFromSessionStorage,
@@ -17,6 +20,7 @@ import {
 } from "@/src/utils/sessionStorage";
 
 export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const [navKey, setNavKey] = useState("");
   const [accessToken, setAccessToken] = useState(
@@ -54,15 +58,16 @@ export default function Header() {
     };
   };
 
-  console.log(navKey);
-
   return (
-    <Navbar>
-      <NavbarBrand>
-        <AcmeLogo />
-        <p className="font-bold text-inherit">ACME</p>
-      </NavbarBrand>
-      <NavbarContent className="sm:flex gap-4" justify="center">
+    <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
+      <NavbarContent className="hidden sm:flex gap-4" justify="start">
+        <NavbarBrand>
+          <AcmeLogo />
+          <p className="font-bold text-inherit">ACME</p>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {navigations.map((nav) => {
           return (
             <NavbarItem
@@ -81,6 +86,40 @@ export default function Header() {
           );
         })}
       </NavbarContent>
+
+      <NavbarContent className="sm:hidden" justify="start">
+        <NavbarMenuToggle
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        />
+      </NavbarContent>
+
+      <NavbarContent className="sm:hidden pr-3" justify="center">
+        <NavbarBrand>
+          <AcmeLogo />
+          <p className="font-bold text-inherit">ACME</p>
+        </NavbarBrand>
+      </NavbarContent>
+
+      <NavbarMenu>
+        {navigations.map((nav) => {
+          return (
+            <NavbarMenuItem
+              className="px-2"
+              key={nav.text}
+              isActive={nav.text === navKey}
+            >
+              <Link
+                color={nav.text === navKey ? "primary" : "foreground"}
+                href={nav.link}
+                onPressEnd={onClickNav(nav.text, nav.link)}
+              >
+                {nav.text}
+              </Link>
+            </NavbarMenuItem>
+          );
+        })}
+      </NavbarMenu>
+
       <NavbarContent justify="end">
         {(!accessToken && (
           <NavbarItem>
