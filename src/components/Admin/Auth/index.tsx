@@ -20,26 +20,28 @@ import {
   Input,
 } from "@nextui-org/react";
 import { validateEmail } from "@/src/utils/helper";
+import { RequestAdminAuthLogin } from "@/src/api/request/admin/dto";
 
 const AdminLoginForm = () => {
   const [isSubmiting, setIsSubmiting] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [adminAuthLogin, setAdminAuthLogin] = useState(
+    new RequestAdminAuthLogin()
+  );
   const [message, setMessage] = useState("");
 
   const checkValidSubmit = () => {
-    if (email == "") {
+    if (adminAuthLogin.email == "") {
       setMessage("Email is required");
       return false;
     }
-    if (!validateEmail(email)) {
+    if (!validateEmail(adminAuthLogin.email)) {
       setMessage("Email is invalid");
       return false;
     }
-    if (password == "") {
+    if (adminAuthLogin.password == "") {
       setMessage("Password is required");
       return false;
     }
@@ -52,7 +54,7 @@ const AdminLoginForm = () => {
     }
     setIsSubmiting(true);
     setMessage("");
-    REQUEST.ADMIN_AUTH_LOGIN(email, password)
+    REQUEST.ADMIN_AUTH_LOGIN(adminAuthLogin)
       .then((response) => response.json())
       .then((data) => {
         if (data.message) {
@@ -77,12 +79,18 @@ const AdminLoginForm = () => {
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target as HTMLInputElement;
-    setEmail(value);
+    setAdminAuthLogin({
+      ...adminAuthLogin,
+      email: value,
+    });
   };
 
   const handlePasssword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target as HTMLInputElement;
-    setPassword(value);
+    setAdminAuthLogin({
+      ...adminAuthLogin,
+      password: value,
+    });
   };
 
   return (

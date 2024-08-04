@@ -81,3 +81,16 @@ export const authResetPassword = (token: string, newPassword: string) => {
     }),
   });
 };
+
+export const authRefreshTokens = (refreshToken: string) => {
+  return fetch(API_ROUTES.authRefreshToken, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({
+      refreshToken: refreshToken,
+    }),
+  });
+};
