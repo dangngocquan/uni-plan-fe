@@ -2,7 +2,6 @@ import classNames from "classnames";
 import styles from "./index.module.scss";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ResponseGetSchool } from "@/src/api/response";
 import { useSearchParams } from "next/navigation";
 import { REQUEST } from "@/src/api/request";
 import {
@@ -30,45 +29,43 @@ import { EditIcon } from "../../UI/EditIcon";
 import { DeleteIcon } from "../../UI/DeleteIcon";
 import { IoMdAdd } from "react-icons/io";
 import {
-  RequestAdminCreateSchool,
-  RequestAdminDeleteSchool,
-  RequestAdminUpdateSchool,
+  RequestAdminCreateMajor,
+  RequestAdminDeleteMajor,
+  RequestAdminUpdateMajor,
 } from "@/src/api/request/admin/dto";
+import { ResponseGetMajor } from "@/src/api/response/major";
 
-const AdminSchool = () => {
+const AdminMajor = (props: { schoolId: string | null }) => {
   const router = useRouter();
-  const [schools, setSchools] = useState(new ResponseGetSchool());
-  const [createSchool, setCreateSchool] = useState(
-    new RequestAdminCreateSchool()
-  );
-  const [updateSchool, setUpdateSchool] = useState(
-    new RequestAdminUpdateSchool()
-  );
-  const [deleteSchool, setDeleteSchool] = useState(
-    new RequestAdminDeleteSchool()
-  );
+  const [Majors, setMajors] = useState(new ResponseGetMajor());
+  const [createMajor, setCreateMajor] = useState(new RequestAdminCreateMajor());
+  const [updateMajor, setUpdateMajor] = useState(new RequestAdminUpdateMajor());
+  const [deleteMajor, setDeleteMajor] = useState(new RequestAdminDeleteMajor());
   const [isLoading, setIsLoading] = useState(false);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const {
-    isOpen: isOpenModalCreateSchool,
-    onOpen: onOpenModalCreateSchool,
-    onClose: onCloseModalCreateSchool,
+    isOpen: isOpenModalCreateMajor,
+    onOpen: onOpenModalCreateMajor,
+    onClose: onCloseModalCreateMajor,
   } = useDisclosure();
   const {
-    isOpen: isOpenModalEditSchool,
-    onOpen: onOpenModalEditSchool,
-    onClose: onCloseModalEditSchool,
+    isOpen: isOpenModalEditMajor,
+    onOpen: onOpenModalEditMajor,
+    onClose: onCloseModalEditMajor,
   } = useDisclosure();
   const {
-    isOpen: isOpenModalDeleteSchool,
-    onOpen: onOpenModalDeleteSchool,
-    onClose: onCloseModalDeleteSchool,
+    isOpen: isOpenModalDeleteMajor,
+    onOpen: onOpenModalDeleteMajor,
+    onClose: onCloseModalDeleteMajor,
   } = useDisclosure();
 
   const searchParams = useSearchParams();
   const order = searchParams.get("order") || "ASC";
   const limit = Number(searchParams.get("limit")) || 10;
+  const schoolId = props.schoolId
+    ? String(props.schoolId)
+    : searchParams.get("schoolId");
 
   const columns = [
     {
@@ -83,6 +80,7 @@ const AdminSchool = () => {
       key: "name",
       label: "NAME",
     },
+    { key: "schoolId", label: "SCHOOL ID" },
     {
       key: "actions",
       label: "ACTIONS",
@@ -90,12 +88,18 @@ const AdminSchool = () => {
   ];
 
   useEffect(() => {
-    REQUEST.GET_SCHOOL({ order: order, limit: limit, page: page, q: query })
+    REQUEST.GET_MAJORS({
+      order: order,
+      limit: limit,
+      page: page,
+      q: query,
+      schoolId: schoolId,
+    })
       .then((res) => res.json())
-      .then((schools: ResponseGetSchool) => {
-        setSchools(schools);
+      .then((Majors: ResponseGetMajor) => {
+        setMajors(Majors);
       });
-  }, [limit, order, page, query, router, isLoading]);
+  }, [limit, order, page, query, router, isLoading, schoolId]);
 
   const handleSearch: React.ChangeEventHandler<HTMLInputElement> = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -110,6 +114,7 @@ const AdminSchool = () => {
         no: string;
         id: string;
         name: string;
+        schoolId: string;
       },
       columnKey: React.Key
     ) => {
@@ -132,21 +137,24 @@ const AdminSchool = () => {
               <p className="text-bold text-sm capitalize">{item.name}</p>
             </div>
           );
+        case "schoolId":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm capitalize">{item.schoolId}</p>
+            </div>
+          );
         case "actions":
           return (
             <div className="relative flex items-center gap-2">
               <Tooltip content="Details">
-                <span
-                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                  onClick={() => handleOpenDetails(item.id)}
-                >
+                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
                   <EyeIcon />
                 </span>
               </Tooltip>
               <Tooltip content="Edit">
                 <span
                   className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                  onClick={() => handleOpenModalUpdateSchool(item.id)}
+                  onClick={() => handleOpenModalUpdateMajor(item.id)}
                 >
                   <EditIcon />
                 </span>
@@ -154,7 +162,7 @@ const AdminSchool = () => {
               <Tooltip color="danger" content="Delete">
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
-                  onClick={() => handleOpenModalDeleteSchool(item.id)}
+                  onClick={() => handleOpenModalDeleteMajor(item.id)}
                 >
                   <DeleteIcon />
                 </span>
@@ -168,81 +176,88 @@ const AdminSchool = () => {
     []
   );
 
-  const handleOpenModalCreateSchool = () => {
-    onOpenModalCreateSchool();
+  const handleOpenModalCreateMajor = () => {
+    onOpenModalCreateMajor();
   };
 
-  const handleOpenModalUpdateSchool = (schoolId: string) => {
-    setUpdateSchool({
-      ...updateSchool,
-      schoolId: schoolId,
+  const handleOpenModalUpdateMajor = (majorId: string) => {
+    setUpdateMajor({
+      ...updateMajor,
+      majorId: majorId,
     });
-    onOpenModalEditSchool();
+    onOpenModalEditMajor();
   };
 
-  const handleOpenModalDeleteSchool = (schoolId: string) => {
-    setDeleteSchool({
-      schoolId: schoolId,
+  const handleOpenModalDeleteMajor = (majorId: string) => {
+    setDeleteMajor({
+      majorId: majorId,
     });
-    onOpenModalDeleteSchool();
+    onOpenModalDeleteMajor();
   };
 
-  const handleCreateSchool = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCreateMajor = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    field: string
+  ) => {
     const { value } = e.target as HTMLInputElement;
-    setCreateSchool({
+    if (field === "name") {
+      setCreateMajor({
+        ...createMajor,
+        name: value,
+      });
+    } else if (field === "schoolId") {
+      setCreateMajor({
+        ...createMajor,
+        schoolId: value,
+      });
+    }
+  };
+
+  const handleUpdateMajor = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target as HTMLInputElement;
+    setUpdateMajor({
+      ...updateMajor,
       name: value,
     });
   };
 
-  const handleUpdateNameSchool = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target as HTMLInputElement;
-    setUpdateSchool({
-      ...updateSchool,
-      name: value,
-    });
-  };
-
-  const handleSubmitCreateSchool = () => {
+  const handleSubmitCreateMajor = () => {
     setIsLoading(true);
-    REQUEST.ADMIN_CREATE_SCHOOL(createSchool)
+    REQUEST.ADMIN_CREATE_MAJOR(createMajor)
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        onCloseModalCreateSchool();
+        onCloseModalCreateMajor();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleSubmitUpdateSchool = (schoolId: string) => {
+  const handleSubmitUpdateMajor = (MajorId: string) => {
     setIsLoading(true);
-    REQUEST.ADMIN_UPDATE_SCHOOL(updateSchool)
+    REQUEST.ADMIN_UPDATE_MAJOR(updateMajor)
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        onCloseModalEditSchool();
+        onCloseModalEditMajor();
       })
       .catch((error) => {
         console.log(error);
       });
   };
 
-  const handleSubmitDeleteSchool = (deleteSchool: RequestAdminDeleteSchool) => {
+  const handleSubmitDeleteMajor = (deleteMajor: RequestAdminDeleteMajor) => {
     setIsLoading(true);
-    REQUEST.ADMIN_DELETE_SCHOOL(deleteSchool)
+    REQUEST.ADMIN_DELETE_MAJOR(deleteMajor)
       .then((res) => res.json())
       .then((data) => {
         setIsLoading(false);
-        onCloseModalEditSchool();
+        onCloseModalDeleteMajor();
       })
       .catch((error) => {
         console.log(error);
       });
-  };
-
-  const handleOpenDetails = (schoolId: string) => {
-    router.push(`/admin/school/${schoolId}`);
   };
 
   return (
@@ -254,13 +269,13 @@ const AdminSchool = () => {
               type="text"
               color="primary"
               variant="bordered"
-              placeholder="Search schools ..."
+              placeholder="Search Majors ..."
               onChange={handleSearch}
               startContent={<FaSearch />}
               className="max-w-[40rem] transition-all pr-[1rem]"
             />
             <Pagination
-              total={schools.meta.totalPages}
+              total={Majors.meta.totalPages}
               initialPage={1}
               page={page}
               onChange={setPage}
@@ -270,12 +285,12 @@ const AdminSchool = () => {
             <Button
               startContent={<IoMdAdd />}
               className="w-[100%]"
-              onClick={handleOpenModalCreateSchool}
+              onClick={handleOpenModalCreateMajor}
             >
-              Add new school
+              Add new Major
             </Button>
           </div>
-          <div className={classNames(styles.schools)}>
+          <div className={classNames(styles.majors)}>
             <Table aria-label="Example table with dynamic content">
               <TableHeader columns={columns}>
                 {(column) => (
@@ -284,7 +299,7 @@ const AdminSchool = () => {
               </TableHeader>
               <TableBody
                 emptyContent={"No rows to display."}
-                items={schools.items.map((item, index) => {
+                items={Majors.items.map((item, index) => {
                   return {
                     key: `${index + 1}`,
                     no: `${index + 1}`,
@@ -305,14 +320,14 @@ const AdminSchool = () => {
         </div>
         <Modal
           size={"xl"}
-          isOpen={isOpenModalCreateSchool}
-          onClose={onCloseModalCreateSchool}
+          isOpen={isOpenModalCreateMajor}
+          onClose={onCloseModalCreateMajor}
         >
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Create new school
+                  Create new Major
                 </ModalHeader>
                 <ModalBody>
                   <Input
@@ -320,7 +335,14 @@ const AdminSchool = () => {
                     color="primary"
                     label="Name"
                     variant="underlined"
-                    onChange={handleCreateSchool}
+                    onChange={(e) => handleCreateMajor(e, "name")}
+                  />
+                  <Input
+                    type="text"
+                    color="primary"
+                    label="School ID"
+                    variant="underlined"
+                    onChange={(e) => handleCreateMajor(e, "schoolId")}
                   />
                 </ModalBody>
                 <ModalFooter>
@@ -329,7 +351,7 @@ const AdminSchool = () => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={handleSubmitCreateSchool}
+                    onPress={handleSubmitCreateMajor}
                     isLoading={isLoading}
                   >
                     Create
@@ -341,14 +363,14 @@ const AdminSchool = () => {
         </Modal>
         <Modal
           size={"xl"}
-          isOpen={isOpenModalEditSchool}
-          onClose={onCloseModalEditSchool}
+          isOpen={isOpenModalEditMajor}
+          onClose={onCloseModalEditMajor}
         >
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Edit school
+                  Edit Major
                 </ModalHeader>
                 <ModalBody>
                   <Input
@@ -356,7 +378,7 @@ const AdminSchool = () => {
                     color="primary"
                     label="Name"
                     variant="underlined"
-                    onChange={handleUpdateNameSchool}
+                    onChange={handleUpdateMajor}
                   />
                 </ModalBody>
                 <ModalFooter>
@@ -365,9 +387,7 @@ const AdminSchool = () => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={() =>
-                      handleSubmitUpdateSchool(updateSchool.schoolId)
-                    }
+                    onPress={() => handleSubmitUpdateMajor(updateMajor.majorId)}
                     isLoading={isLoading}
                   >
                     Save
@@ -379,17 +399,17 @@ const AdminSchool = () => {
         </Modal>
         <Modal
           size={"xl"}
-          isOpen={isOpenModalDeleteSchool}
-          onClose={onCloseModalDeleteSchool}
+          isOpen={isOpenModalDeleteMajor}
+          onClose={onCloseModalDeleteMajor}
         >
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Delete school
+                  Delete Major
                 </ModalHeader>
                 <ModalBody>
-                  {`Are you sure you want to delete this school? This action cannot be undone.`}
+                  {`Are you sure you want to delete this Major? This action cannot be undone.`}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
@@ -397,7 +417,7 @@ const AdminSchool = () => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={() => handleSubmitDeleteSchool(deleteSchool)}
+                    onPress={() => handleSubmitDeleteMajor(deleteMajor)}
                     isLoading={isLoading}
                   >
                     Confirm
@@ -412,4 +432,4 @@ const AdminSchool = () => {
   );
 };
 
-export default AdminSchool;
+export default AdminMajor;
