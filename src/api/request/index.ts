@@ -1,4 +1,3 @@
-import { adminAuthLogin } from "./admin";
 import {
   adminAuthLogin,
   adminCreateMajor,
