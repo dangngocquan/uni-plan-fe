@@ -26,7 +26,7 @@ const MajorPage = (props: { schoolId: string | null }) => {
   const searchParams = useSearchParams();
   const order = searchParams.get("order") || "ASC";
   const limit = Number(searchParams.get("limit")) || 10;
-  const schoolIdd = props.schoolId
+  const schoolId = props.schoolId
     ? String(props.schoolId)
     : searchParams.get("schoolId");
 
@@ -36,14 +36,14 @@ const MajorPage = (props: { schoolId: string | null }) => {
       limit: limit,
       page: page,
       q: query,
-      schoolId: schoolIdd,
+      schoolId: schoolId,
     })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         setMajors(data);
       });
-  }, [limit, order, page, query, router, schoolIdd]);
+  }, [limit, order, page, query, router, schoolId]);
 
   const handleSearch: React.ChangeEventHandler<HTMLInputElement> = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -64,7 +64,7 @@ const MajorPage = (props: { schoolId: string | null }) => {
               placeholder="Search major ..."
               onChange={handleSearch}
               startContent={<FaSearch />}
-              className="max-w-[40rem] transition-all"
+              className="max-w-[40rem] transition-all pr-[1rem]"
             />
             <Pagination
               total={majors.meta.totalPages}

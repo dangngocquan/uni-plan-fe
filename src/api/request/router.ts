@@ -8,6 +8,7 @@ const API_ROUTES = {
   authVerifySignUp: `${apiConfig.ROOT_API}/api/auth/verify-signup`,
   authForgotPassword: `${apiConfig.ROOT_API}/api/auth/forgot-password`,
   authResetPassword: `${apiConfig.ROOT_API}/api/auth/reset-password`,
+  authRefreshToken: `${apiConfig.ROOT_API}/api/auth/refresh-token`,
   getSchool: `${apiConfig.ROOT_API}/api/school`,
   getMajors: `${apiConfig.ROOT_API}/api/major`,
   adminAuthLogin: `${apiConfig.ROOT_API}/api/admin/auth/login`,
