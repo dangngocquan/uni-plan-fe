@@ -1,6 +1,8 @@
 .wrapper {
   display: flex;
+  // align-items: center;
   flex-direction: column;
+  justify-content: space-around;
   align-items: center;
   width: 100%;
   min-height: 100vh;
@@ -9,6 +11,15 @@
 
 .filter {
   display: flex;
+  // align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  padding-top: 2rem;
+}
+
+.method {
+  display: flex;
+  // align-items: center;
   justify-content: space-between;
   width: 80%;
   padding-top: 2rem;
@@ -16,9 +27,9 @@
 
 .majors {
   display: flex;
-  justify-content: start;
-  align-items: start;
+  // align-items: center;
+  justify-content: space-around;
   width: 80%;
+  min-height: 100vh;
   padding-top: 2rem;
-  flex-wrap: wrap;
 }

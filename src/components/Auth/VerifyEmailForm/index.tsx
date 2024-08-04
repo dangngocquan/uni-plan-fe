@@ -35,20 +35,22 @@ const VerifyEmailForm = () => {
         REQUEST.AUTH_VERIFY_SIGNUP(token.toString())
           .then((response) => response.json())
           .then((data) => {
-            console.log(data);
-            setIsVerified(true);
-            setMessage("Your email has been verified.");
-            saveToSessionStorage(
-              SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY,
-              data.accessToken
-            );
-            saveToSessionStorage(
-              SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
-              data.refreshToken
-            );
+            if (data.message) {
+              setMessage("Invalid or expired verification link.");
+            } else {
+              setIsVerified(true);
+              setMessage("Your email has been verified.");
+              saveToSessionStorage(
+                SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY,
+                data.accessToken
+              );
+              saveToSessionStorage(
+                SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
+                data.refreshToken
+              );
+            }
           })
           .catch((error) => {
-            console.log(error);
             setMessage("Invalid or expired verification link.");
           });
       } else {

@@ -54,7 +54,7 @@ const SchoolPage = () => {
               placeholder="Search schools ..."
               onChange={handleSearch}
               startContent={<FaSearch />}
-              className="max-w-[40rem] transition-all"
+              className="max-w-[40rem] transition-all pr-[1rem]"
             />
             <Pagination
               total={schools.meta.totalPages}
@@ -66,8 +66,12 @@ const SchoolPage = () => {
           <div className={classNames(styles.schools)}>
             {schools.items.map((school) => {
               return (
-                <Link href={`/school/${school.id}`} key={school.id}>
-                  <Card className="h-[9rem] w-[20rem] cursor-pointer">
+                <Link
+                  href={`/school/${school.id}`}
+                  key={school.id}
+                  className="px-[1rem] py-[1rem] h-[10rem] w-[20rem]"
+                >
+                  <Card className="w-[100%] h-[100%] cursor-pointer">
                     <CardHeader className="justify-center text-3xl">
                       <IoSchool />
                     </CardHeader>
