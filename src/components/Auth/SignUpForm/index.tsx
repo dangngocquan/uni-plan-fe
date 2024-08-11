@@ -72,14 +72,14 @@ const SignUpForm = () => {
           setIsSubmiting(false);
           setMessage(data.message);
         } else {
-          saveToSessionStorage(
-            SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY,
-            data.accessToken
-          );
-          saveToSessionStorage(
-            SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
-            data.refreshToken
-          );
+          // saveToSessionStorage(
+          //   SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY,
+          //   data.accessToken
+          // );
+          // saveToSessionStorage(
+          //   SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
+          //   data.refreshToken
+          // );
           router.push("/auth/verify-email");
         }
       })

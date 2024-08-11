@@ -1,3 +1,4 @@
+import { ResponseGroupCourseDetails } from "./group-course";
 import { ResponsePageLinks, ResponsePageMeta } from "./pagination";
 
 export class ResponseGetMajor {
@@ -21,5 +22,14 @@ export class ResponseMajor {
     this.id = "";
     this.name = "";
     this.schoolId = "";
+  }
+}
+
+export class ResponseMajorDetail extends ResponseMajor {
+  groupCourses: ResponseGroupCourseDetails[];
+
+  constructor() {
+    super();
+    this.groupCourses = [];
   }
 }

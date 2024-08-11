@@ -16,14 +16,21 @@ export const getMajors = (options: IMajorSearch) => {
   if (options.order) queries.push(`order=${options.order}`);
   if (options.schoolId != null) queries.push(`schoolId=${options.schoolId}`);
 
-  return fetch(
-    `${API_ROUTES.getMajors}?${queries.join("&")}`,
-    {
-      method: "GET",
-      // headers: {
-      //   "Content-Type": "application/json",
-      //   "Access-Control-Allow-Origin": "*",
-      // },
-    }
-  );
+  return fetch(`${API_ROUTES.getMajors}?${queries.join("&")}`, {
+    method: "GET",
+    // headers: {
+    //   "Content-Type": "application/json",
+    //   "Access-Control-Allow-Origin": "*",
+    // },
+  });
+};
+
+export const getMajorDetails = (majorId: string) => {
+  return fetch(`${API_ROUTES.getMajorDetails(majorId)}`, {
+    method: "GET",
+    // headers: {
+    //   "Content-Type": "application/json",
+    //   "Access-Control-Allow-Origin": "*",
+    // },
+  });
 };
