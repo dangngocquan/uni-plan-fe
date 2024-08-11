@@ -205,12 +205,11 @@ const AdminSchool = () => {
   const handleSubmitCreateSchool = () => {
     setIsLoading(true);
     REQUEST.ADMIN_CREATE_SCHOOL(createSchool)
-      .then((res) => res.json())
-      .then((data) => {
+      .then((data: any) => {
         setIsLoading(false);
         onCloseModalCreateSchool();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
@@ -218,12 +217,11 @@ const AdminSchool = () => {
   const handleSubmitUpdateSchool = (schoolId: string) => {
     setIsLoading(true);
     REQUEST.ADMIN_UPDATE_SCHOOL(updateSchool)
-      .then((res) => res.json())
-      .then((data) => {
+      .then((data: any) => {
         setIsLoading(false);
         onCloseModalEditSchool();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
@@ -231,12 +229,11 @@ const AdminSchool = () => {
   const handleSubmitDeleteSchool = (deleteSchool: RequestAdminDeleteSchool) => {
     setIsLoading(true);
     REQUEST.ADMIN_DELETE_SCHOOL(deleteSchool)
-      .then((res) => res.json())
-      .then((data) => {
+      .then((data: any) => {
         setIsLoading(false);
         onCloseModalEditSchool();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
