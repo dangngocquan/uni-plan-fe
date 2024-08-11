@@ -2,14 +2,12 @@ import classNames from "classnames";
 import styles from "./index.module.scss";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ResponseGetSchool } from "@/src/api/response";
 import { useSearchParams } from "next/navigation";
 import { REQUEST } from "@/src/api/request";
 import MainLayout from "../layouts/MainLayout";
 import {
   Card,
   CardBody,
-  CardFooter,
   CardHeader,
   Input,
   Pagination,
@@ -17,6 +15,7 @@ import {
 import { FaSearch } from "react-icons/fa";
 import { ResponseGetMajor } from "@/src/api/response/major";
 import { TbActivity } from "react-icons/tb";
+import Link from "next/link";
 
 const MajorPage = (props: { schoolId: string | null }) => {
   const router = useRouter();
@@ -76,14 +75,23 @@ const MajorPage = (props: { schoolId: string | null }) => {
           <div className={classNames(styles.majors)}>
             {majors.items.map((e) => {
               return (
-                <Card key={e.id} className="h-[7rem] w-[20rem] cursor-pointer">
-                  <CardHeader className="justify-center text-3xl">
-                    <TbActivity />
-                  </CardHeader>
-                  <CardBody className="justify-center text-center">
-                    {e.name}
-                  </CardBody>
-                </Card>
+                <Link
+                  href={`/major/${e.id}`}
+                  key={e.id}
+                  className="px-[1rem] py-[1rem] h-[10rem] w-[20rem]"
+                >
+                  <Card
+                    key={e.id}
+                    className="h-[7rem] w-[20rem] cursor-pointer"
+                  >
+                    <CardHeader className="justify-center text-3xl">
+                      <TbActivity />
+                    </CardHeader>
+                    <CardBody className="justify-center text-center">
+                      {e.name}
+                    </CardBody>
+                  </Card>
+                </Link>
               );
             })}
           </div>

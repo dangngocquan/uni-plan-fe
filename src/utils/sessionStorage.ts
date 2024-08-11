@@ -25,7 +25,7 @@ export const refreshTokens = (role: string) => {
       SESSION_STORAGE_KEYS.ADMIN_REFRESH_TOKEN_KEY
     );
     if (refreshToken) {
-      REQUEST.AUTH_REFRESH_TOKEN(refreshToken)
+      return REQUEST.AUTH_REFRESH_TOKEN(refreshToken)
         .then((res) => res.json())
         .then((res) => {
           if (res.message) {
@@ -45,8 +45,10 @@ export const refreshTokens = (role: string) => {
               res.refreshToken
             );
           }
+          return res;
         });
     }
+    return new Promise(() => {});
   } else {
     const refreshToken = getFromSessionStorage(
       SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY
@@ -68,8 +70,10 @@ export const refreshTokens = (role: string) => {
               res.refreshToken
             );
           }
+          return res;
         });
     }
+    return new Promise(() => {});
   }
 };
 

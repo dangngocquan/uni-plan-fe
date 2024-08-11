@@ -147,7 +147,10 @@ const AdminMajor = (props: { schoolId: string | null }) => {
           return (
             <div className="relative flex items-center gap-2">
               <Tooltip content="Details">
-                <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+                <span
+                  className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                  onClick={() => handleSubmitMajorDetails(item.id)}
+                >
                   <EyeIcon />
                 </span>
               </Tooltip>
@@ -224,25 +227,25 @@ const AdminMajor = (props: { schoolId: string | null }) => {
   const handleSubmitCreateMajor = () => {
     setIsLoading(true);
     REQUEST.ADMIN_CREATE_MAJOR(createMajor)
-      .then((res) => res.json())
-      .then((data) => {
+
+      .then((data: any) => {
         setIsLoading(false);
         onCloseModalCreateMajor();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
 
-  const handleSubmitUpdateMajor = (MajorId: string) => {
+  const handleSubmitUpdateMajor = () => {
     setIsLoading(true);
     REQUEST.ADMIN_UPDATE_MAJOR(updateMajor)
-      .then((res) => res.json())
-      .then((data) => {
+
+      .then((data: any) => {
         setIsLoading(false);
         onCloseModalEditMajor();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
   };
@@ -250,14 +253,18 @@ const AdminMajor = (props: { schoolId: string | null }) => {
   const handleSubmitDeleteMajor = (deleteMajor: RequestAdminDeleteMajor) => {
     setIsLoading(true);
     REQUEST.ADMIN_DELETE_MAJOR(deleteMajor)
-      .then((res) => res.json())
-      .then((data) => {
+
+      .then((data: any) => {
         setIsLoading(false);
         onCloseModalDeleteMajor();
       })
-      .catch((error) => {
+      .catch((error: any) => {
         console.log(error);
       });
+  };
+
+  const handleSubmitMajorDetails = (majorId: string) => {
+    router.push(`/admin/major/${majorId}`);
   };
 
   return (
@@ -387,7 +394,7 @@ const AdminMajor = (props: { schoolId: string | null }) => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={() => handleSubmitUpdateMajor(updateMajor.majorId)}
+                    onPress={handleSubmitUpdateMajor}
                     isLoading={isLoading}
                   >
                     Save
