@@ -31,10 +31,12 @@ export class ResponseCourse {
 }
 
 export class ResponseCourseRelationDto {
+  id: string;
   courseId: string;
   prereqCourseCode: string;
 
   constructor() {
+    this.id = "";
     this.courseId = "";
     this.prereqCourseCode = "";
   }
