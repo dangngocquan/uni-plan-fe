@@ -15,7 +15,7 @@ import {
 import { ResponseMajorDetail } from "@/src/api/response/major";
 import { NO_I } from "@/src/utils/helper";
 import { ResponseGroupCourseDetails } from "@/src/api/response";
-import AdminLayout from "../layouts/AdminLayout";
+import MainLayout from "../layouts/MainLayout";
 
 const UserMajorDetails = (props: { majorId: string | null }) => {
   const router = useRouter();
@@ -232,7 +232,7 @@ const UserMajorDetails = (props: { majorId: string | null }) => {
 
   return (
     <div>
-      <AdminLayout>
+      <MainLayout>
         <div className={classNames(styles.wrapper)}>
           <div className={classNames(styles.majors)}>
             <Table aria-label="Example table with dynamic content">
@@ -256,7 +256,7 @@ const UserMajorDetails = (props: { majorId: string | null }) => {
             </Table>
           </div>
         </div>
-      </AdminLayout>
+      </MainLayout>
     </div>
   );
 };
