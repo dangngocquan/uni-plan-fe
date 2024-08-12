@@ -19,7 +19,7 @@ import MainLayout from "../layouts/MainLayout";
 
 const UserMajorDetails = (props: { majorId: string | null }) => {
   const router = useRouter();
-  const [tableData, setTableData] = useState<Array<any>>();
+  const [tableData, setTableData] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
@@ -52,23 +52,24 @@ const UserMajorDetails = (props: { majorId: string | null }) => {
   ];
 
   useEffect(() => {
-    REQUEST.GET_MAJOR_DETAILS(props.majorId || "")
+    REQUEST.GET_MAJOR_DETAILS(
+      props.majorId ? String(props.majorId) : searchParams.get("majorId") || ""
+    )
       .then((res) => res.json())
       .then((majorDetails: ResponseMajorDetail) => {
         const list: Array<any> = [];
-        let countMainGroup = 0;
-        let tempCountChildGroup = 0;
         let countCourse = 1;
         const solveGroup = (
           groupData: ResponseGroupCourseDetails,
-          round: number
+          level: number,
+          parentNo: string,
+          indexChild: number
         ) => {
+          const no =
+            level == 1 ? NO_I[indexChild] : `${parentNo}.${indexChild + 1}`;
           list.push({
             isGroup: true,
-            no:
-              round == 1
-                ? NO_I[countMainGroup]
-                : `${NO_I[countMainGroup]}.${tempCountChildGroup + 1}`,
+            no: no,
             id: groupData.id,
             group: {
               type: groupData.type,
@@ -98,23 +99,22 @@ const UserMajorDetails = (props: { majorId: string | null }) => {
             });
             countCourse += 1;
           }
-          for (const childGroup of groupData.children) {
-            solveGroup(childGroup, round + 1);
-            tempCountChildGroup += 1;
-          }
-          if (round == 1) {
-            tempCountChildGroup = 0;
-            countMainGroup += 1;
+          for (let i = 0; i < groupData.children.length; i++) {
+            const childGroup = groupData.children[i];
+            solveGroup(childGroup, level + 1, no, i);
           }
         };
 
-        for (const groupData of majorDetails.groupCourses) {
-          solveGroup(groupData, 1);
+        for (let j = 0; j < majorDetails.groupCourses.length; j++) {
+          const groupData = majorDetails.groupCourses[j];
+          solveGroup(groupData, 1, "", j);
         }
-        console.log(list);
         setTableData(list);
+      })
+      .catch(() => {
+        setTableData([]);
       });
-  }, [props.majorId]);
+  }, [props.majorId, searchParams]);
 
   const renderCell = React.useCallback(
     (
