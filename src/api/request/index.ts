@@ -21,6 +21,7 @@ import {
 import {
   authForgotPassword,
   authGoogle,
+  authMe,
   authRefreshTokens,
   authResetPassword,
   authSignIn,
@@ -28,6 +29,16 @@ import {
   authVerifySignUp,
 } from "./auth";
 import { getMajorDetails, getMajors } from "./major";
+import {
+  createPlan,
+  createPlanCourses,
+  deletePlan,
+  deletePlanCourse,
+  getPlanCourses,
+  getPlans,
+  updatePlan,
+  updatePlanCourse,
+} from "./plan/plan";
 import { getSchool } from "./school";
 
 export const REQUEST = {
@@ -38,9 +49,30 @@ export const REQUEST = {
   AUTH_FORGOT_PASSWORD: authForgotPassword,
   AUTH_RESET_PASSWORD: authResetPassword,
   AUTH_REFRESH_TOKEN: authRefreshTokens,
+  AUTH_ME: () => requestWithRefreshTokens(() => authMe(), "USER"),
+
   GET_SCHOOL: getSchool,
   GET_MAJORS: getMajors,
   GET_MAJOR_DETAILS: getMajorDetails,
+
+  GET_PLANS: (data: any) =>
+    requestWithRefreshTokens(() => getPlans(data), "USER"),
+  CREATE_PLAN: (data: any) =>
+    requestWithRefreshTokens(() => createPlan(data), "USER"),
+  UPDATE_PLAN: (data: any) =>
+    requestWithRefreshTokens(() => updatePlan(data), "USER"),
+  DELETE_PLAN: (data: any) =>
+    requestWithRefreshTokens(() => deletePlan(data), "USER"),
+
+  GET_PLAN_COURSES: (data: any) =>
+    requestWithRefreshTokens(() => getPlanCourses(data), "USER"),
+  CREATE_PLAN_COURSES: (data: any) =>
+    requestWithRefreshTokens(() => createPlanCourses(data), "USER"),
+  UPDATE_PLAN_COURSE: (data: any) =>
+    requestWithRefreshTokens(() => updatePlanCourse(data), "USER"),
+  DELETE_PLAN_COURSE: (data: any) =>
+    requestWithRefreshTokens(() => deletePlanCourse(data), "USER"),
+
   ADMIN_AUTH_LOGIN: adminAuthLogin,
   ADMIN_CREATE_SCHOOL: (data: any) =>
     requestWithRefreshTokens(() => adminCreateSchool(data)),

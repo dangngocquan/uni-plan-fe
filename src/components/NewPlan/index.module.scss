@@ -1,0 +1,63 @@
+.wrapper {
+  display: flex;
+  // align-items: center;
+  flex-direction: column;
+  // justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 100%;
+  padding: 0;
+}
+
+.steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  min-height: 100%;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  // align-items: center;
+  flex-direction: column;
+  // justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  padding: 0;
+}
+
+.content_9 {
+  display: flex;
+  // align-items: center;
+  flex-direction: column;
+  // justify-content: space-around;
+  align-items: center;
+  width: 90%;
+  padding: 0;
+}
+
+.methods {
+  display: flex;
+  // align-items: center;
+  justify-content: space-around;
+  width: 80%;
+  padding-top: 2rem;
+}
+
+.filter {
+  display: flex;
+  justify-content: space-between;
+  width: 90%;
+  padding-top: 2rem;
+}
+
+.schools {
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  width: 90%;
+  padding-top: 2rem;
+  flex-wrap: wrap;
+}

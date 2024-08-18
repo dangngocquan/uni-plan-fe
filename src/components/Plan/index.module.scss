@@ -1,0 +1,35 @@
+.wrapper {
+  display: flex;
+  // align-items: center;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  padding: 0;
+}
+
+.filter {
+  display: flex;
+  // align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  padding-top: 2rem;
+}
+
+.method {
+  display: flex;
+  // align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  padding-top: 2rem;
+}
+
+.schools {
+  display: flex;
+  // align-items: center;
+  justify-content: space-around;
+  width: 80%;
+  min-height: 100vh;
+  padding-top: 2rem;
+}
