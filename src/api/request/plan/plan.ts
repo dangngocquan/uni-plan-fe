@@ -72,7 +72,7 @@ export const updatePlan = (data: RequestUpdatePlan) => {
 };
 
 export const deletePlan = (data: RequestDeletePlan) => {
-  return fetch(API_ROUTES.adminDeleteCourse(data.planId), {
+  return fetch(API_ROUTES.deletePlan(data.planId), {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
