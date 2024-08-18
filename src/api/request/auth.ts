@@ -1,4 +1,16 @@
+import { getUserAccessToken } from "@/src/utils/sessionStorage";
 import API_ROUTES from "./router";
+
+export const authMe = () => {
+  return fetch(API_ROUTES.authMe, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      authorization: `Bearer ${getUserAccessToken()}`,
+    },
+  });
+};
 
 export const authGoogle = (googleAccessToken: string) => {
   return fetch(API_ROUTES.authGoogle, {

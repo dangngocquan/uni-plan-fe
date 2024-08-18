@@ -9,12 +9,28 @@ const API_ROUTES = {
   authForgotPassword: `${apiConfig.ROOT_API}/api/auth/forgot-password`,
   authResetPassword: `${apiConfig.ROOT_API}/api/auth/reset-password`,
   authRefreshToken: `${apiConfig.ROOT_API}/api/auth/refresh-token`,
+  authMe: `${apiConfig.ROOT_API}/api/auth/me`,
+
   getSchool: `${apiConfig.ROOT_API}/api/school`,
   getMajors: `${apiConfig.ROOT_API}/api/major`,
   getMajorDetails: (majorId: string) =>
     `${apiConfig.ROOT_API}/api/major/detail/${majorId}`,
   getGroupCourses: `${apiConfig.ROOT_API}/api/group-course`,
   getCourses: `${apiConfig.ROOT_API}/api/course`,
+
+  getPlans: `${apiConfig.ROOT_API}/api/plan`,
+  createPlan: `${apiConfig.ROOT_API}/api/plan`,
+  updatePlan: (planId: string) => `${apiConfig.ROOT_API}/api/plan/${planId}`,
+  deletePlan: (planId: string) => `${apiConfig.ROOT_API}/api/plan/${planId}`,
+
+  getPlanCourses: `${apiConfig.ROOT_API}/api/plan-course`,
+  createPlanCourse: (planId: string) =>
+    `${apiConfig.ROOT_API}/api/plan-course/${planId}`,
+  updatePlanCourse: (planCourseId: string) =>
+    `${apiConfig.ROOT_API}/api/plan-course/${planCourseId}`,
+  deletePlanCourse: (planCourseId: string) =>
+    `${apiConfig.ROOT_API}/api/plan-course/${planCourseId}`,
+
   adminAuthLogin: `${apiConfig.ROOT_API}/api/admin/auth/login`,
   adminCreateSchool: `${apiConfig.ROOT_API}/api/admin/school`,
   adminUpdateSchool: (schoolId: string) =>

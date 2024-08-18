@@ -83,3 +83,22 @@ export const SESSION_STORAGE_KEYS = {
   ADMIN_ACCESS_TOKEN_KEY: "univerplan-admin-accessToken",
   ADMIN_REFRESH_TOKEN_KEY: "univerplan-admin-refreshToken",
 };
+
+export const getUserAccessToken = () =>
+  getFromSessionStorage(SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY);
+
+export const getUserRefreshToken = () =>
+  getFromSessionStorage(SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY);
+
+export const getUAdminAccessToken = () =>
+  getFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY);
+
+export const getUAdminRefreshToken = () =>
+  getFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_REFRESH_TOKEN_KEY);
+
+export const logout = () => {
+  removeFromSessionStorage(SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY);
+  removeFromSessionStorage(SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY);
+  removeFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY);
+  removeFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_REFRESH_TOKEN_KEY);
+}

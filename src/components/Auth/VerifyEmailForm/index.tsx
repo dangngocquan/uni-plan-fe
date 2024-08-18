@@ -7,6 +7,7 @@ import styles from "./index.module.scss";
 import {
   SESSION_STORAGE_KEYS,
   getFromSessionStorage,
+  getUserAccessToken,
   saveToSessionStorage,
 } from "@/src/utils/sessionStorage";
 import { REQUEST } from "@/src/api/request";
@@ -30,7 +31,7 @@ const VerifyEmailForm = () => {
   const token = query.token;
 
   useEffect(() => {
-    if (!getFromSessionStorage(SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY)) {
+    if (!getUserAccessToken()) {
       if (token) {
         REQUEST.AUTH_VERIFY_SIGNUP(token.toString())
           .then((response) => response.json())
