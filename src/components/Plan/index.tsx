@@ -238,10 +238,12 @@ const Plan = () => {
       .then((data: any) => {
         setIsLoading(false);
         onCloseModalEditPlan();
+        router.reload();
       })
       .catch((error: any) => {
         console.log(error);
       });
+    setIsLoading(false);
   };
 
   const handleSubmitDeletePlan = () => {
@@ -250,10 +252,12 @@ const Plan = () => {
       .then((data: any) => {
         setIsLoading(false);
         onCloseModalDeletePlan();
+        router.reload();
       })
       .catch((error: any) => {
         console.log(error);
       });
+    setIsLoading(false);
   };
 
   const handleOpenDetails = (schoolId: string) => {
