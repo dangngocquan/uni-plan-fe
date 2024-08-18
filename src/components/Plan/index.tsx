@@ -2,7 +2,6 @@ import classNames from "classnames";
 import styles from "./index.module.scss";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { ResponseGetSchool } from "@/src/api/response";
 import { useSearchParams } from "next/navigation";
 import { REQUEST } from "@/src/api/request";
 import {
@@ -24,46 +23,43 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { FaSearch } from "react-icons/fa";
-import AdminLayout from "../../layouts/AdminLayout";
-import { EyeIcon } from "../../UI/EyeIcon";
-import { EditIcon } from "../../UI/EditIcon";
-import { DeleteIcon } from "../../UI/DeleteIcon";
 import { IoMdAdd } from "react-icons/io";
+import MainLayout from "../layouts/MainLayout";
+import { EyeIcon } from "../UI/EyeIcon";
+import { EditIcon } from "../UI/EditIcon";
+import { DeleteIcon } from "../UI/DeleteIcon";
+import { ResponseGetPlan } from "@/src/api/response/plan";
+import { getUserAccessToken } from "@/src/utils/sessionStorage";
 import {
-  RequestAdminCreateSchool,
-  RequestAdminDeleteSchool,
-  RequestAdminUpdateSchool,
-} from "@/src/api/request/admin/dto";
+  RequestCreatePlan,
+  RequestDeletePlan,
+  RequestUpdatePlan,
+} from "@/src/api/request/plan/dto";
+import Loading from "../Loading";
 
-const AdminSchool = () => {
+const Plan = () => {
   const router = useRouter();
-  const [schools, setSchools] = useState(new ResponseGetSchool());
-  const [createSchool, setCreateSchool] = useState(
-    new RequestAdminCreateSchool()
-  );
-  const [updateSchool, setUpdateSchool] = useState(
-    new RequestAdminUpdateSchool()
-  );
-  const [deleteSchool, setDeleteSchool] = useState(
-    new RequestAdminDeleteSchool()
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  const [plans, setPlans] = useState(new ResponseGetPlan());
+  const [createPlan, setCreatePlan] = useState(new RequestCreatePlan());
+  const [updatePlan, setUpdatePlan] = useState(new RequestUpdatePlan());
+  const [deletePlan, setDeletePlan] = useState(new RequestDeletePlan());
+  const [isLoading, setIsLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const {
-    isOpen: isOpenModalCreateSchool,
-    onOpen: onOpenModalCreateSchool,
-    onClose: onCloseModalCreateSchool,
+    isOpen: isOpenModalCreatePlan,
+    onOpen: onOpenModalCreatePlan,
+    onClose: onCloseModalCreatePlan,
   } = useDisclosure();
   const {
-    isOpen: isOpenModalEditSchool,
-    onOpen: onOpenModalEditSchool,
-    onClose: onCloseModalEditSchool,
+    isOpen: isOpenModalEditPlan,
+    onOpen: onOpenModalEditPlan,
+    onClose: onCloseModalEditPlan,
   } = useDisclosure();
   const {
-    isOpen: isOpenModalDeleteSchool,
-    onOpen: onOpenModalDeleteSchool,
-    onClose: onCloseModalDeleteSchool,
+    isOpen: isOpenModalDeletePlan,
+    onOpen: onOpenModalDeletePlan,
+    onClose: onCloseModalDeletePlan,
   } = useDisclosure();
 
   const searchParams = useSearchParams();
@@ -75,13 +71,17 @@ const AdminSchool = () => {
       key: "no",
       label: "NO",
     },
-    {
-      key: "id",
-      label: "ID",
-    },
+    // {
+    //   key: "id",
+    //   label: "ID",
+    // },
     {
       key: "name",
       label: "NAME",
+    },
+    {
+      key: "createdAt",
+      label: "CREATED AT",
     },
     {
       key: "actions",
@@ -90,11 +90,16 @@ const AdminSchool = () => {
   ];
 
   useEffect(() => {
-    REQUEST.GET_SCHOOL({ order: order, limit: limit, page: page, q: query })
-      .then((res) => res.json())
-      .then((schools: ResponseGetSchool) => {
-        setSchools(schools);
-      });
+    if (!getUserAccessToken()) {
+      router.push("/auth/signin");
+    } else {
+      REQUEST.GET_PLANS({ order: order, limit: limit, page: page, q: query })
+        // .then((res) => res.json())
+        .then((data: ResponseGetPlan) => {
+          setPlans(data);
+        });
+      setIsLoading(false);
+    }
   }, [limit, order, page, query, router, isLoading]);
 
   const handleSearch: React.ChangeEventHandler<HTMLInputElement> = (
@@ -107,9 +112,14 @@ const AdminSchool = () => {
   const renderCell = React.useCallback(
     (
       item: {
+        key: string;
         no: string;
         id: string;
         name: string;
+        createdAt: string;
+        updatedAt: string;
+        ownerId: string;
+        status: string;
       },
       columnKey: React.Key
     ) => {
@@ -120,16 +130,24 @@ const AdminSchool = () => {
               <p className="text-bold text-sm capitalize">{item.no}</p>
             </div>
           );
-        case "id":
-          return (
-            <div className="flex flex-col">
-              <p className="text-bold text-sm capitalize">{item.id}</p>
-            </div>
-          );
+        // case "id":
+        //   return (
+        //     <div className="flex flex-col">
+        //       <p className="text-bold text-sm capitalize">{item.id}</p>
+        //     </div>
+        //   );
         case "name":
           return (
             <div className="flex flex-col">
               <p className="text-bold text-sm capitalize">{item.name}</p>
+            </div>
+          );
+        case "createdAt":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm capitalize">
+                {new Date(item.createdAt).toUTCString()}
+              </p>
             </div>
           );
         case "actions":
@@ -146,7 +164,7 @@ const AdminSchool = () => {
               <Tooltip content="Edit">
                 <span
                   className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                  onClick={() => handleOpenModalUpdateSchool(item.id)}
+                  onClick={() => handleOpenModalUpdatePlan(item.id)}
                 >
                   <EditIcon />
                 </span>
@@ -154,7 +172,7 @@ const AdminSchool = () => {
               <Tooltip color="danger" content="Delete">
                 <span
                   className="text-lg text-danger cursor-pointer active:opacity-50"
-                  onClick={() => handleOpenModalDeleteSchool(item.id)}
+                  onClick={() => handleOpenModalDeletePlan(item.id)}
                 >
                   <DeleteIcon />
                 </span>
@@ -168,70 +186,70 @@ const AdminSchool = () => {
     []
   );
 
-  const handleOpenModalCreateSchool = () => {
-    onOpenModalCreateSchool();
+  const handleOpenModalCreatePlan = () => {
+    router.push("/plan/new");
   };
 
-  const handleOpenModalUpdateSchool = (schoolId: string) => {
-    setUpdateSchool({
-      ...updateSchool,
-      schoolId: schoolId,
+  const handleOpenModalUpdatePlan = (id: string) => {
+    setUpdatePlan({
+      ...updatePlan,
+      planId: id,
     });
-    onOpenModalEditSchool();
+    onOpenModalEditPlan();
   };
 
-  const handleOpenModalDeleteSchool = (schoolId: string) => {
-    setDeleteSchool({
-      schoolId: schoolId,
+  const handleOpenModalDeletePlan = (id: string) => {
+    setDeletePlan({
+      planId: id,
     });
-    onOpenModalDeleteSchool();
+    onOpenModalDeletePlan();
   };
 
-  const handleCreateSchool = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCreatePlan = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target as HTMLInputElement;
-    setCreateSchool({
+    setCreatePlan({
       name: value,
     });
   };
 
-  const handleUpdateNameSchool = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpdatePlan = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target as HTMLInputElement;
-    setUpdateSchool({
-      ...updateSchool,
+    setUpdatePlan({
+      ...updatePlan,
       name: value,
     });
   };
 
-  const handleSubmitCreateSchool = () => {
+  const handleSubmitCreatePlan = () => {
     setIsLoading(true);
-    REQUEST.ADMIN_CREATE_SCHOOL(createSchool)
+    REQUEST.CREATE_PLAN(createPlan)
       .then((data: any) => {
         setIsLoading(false);
-        onCloseModalCreateSchool();
+        onCloseModalCreatePlan();
       })
       .catch((error: any) => {
         console.log(error);
       });
   };
 
-  const handleSubmitUpdateSchool = (schoolId: string) => {
+  const handleSubmitUpdatePlan = () => {
     setIsLoading(true);
-    REQUEST.ADMIN_UPDATE_SCHOOL(updateSchool)
+    REQUEST.UPDATE_PLAN(updatePlan)
       .then((data: any) => {
         setIsLoading(false);
-        onCloseModalEditSchool();
+        onCloseModalEditPlan();
       })
       .catch((error: any) => {
         console.log(error);
       });
   };
 
-  const handleSubmitDeleteSchool = (deleteSchool: RequestAdminDeleteSchool) => {
+  const handleSubmitDeletePlan = () => {
     setIsLoading(true);
-    REQUEST.ADMIN_DELETE_SCHOOL(deleteSchool)
+    REQUEST.DELETE_PLAN(deletePlan)
       .then((data: any) => {
         setIsLoading(false);
-        onCloseModalDeleteSchool();
+        onCloseModalDeletePlan();
       })
       .catch((error: any) => {
         console.log(error);
@@ -239,25 +257,33 @@ const AdminSchool = () => {
   };
 
   const handleOpenDetails = (schoolId: string) => {
-    router.push(`/admin/school/${schoolId}`);
+    // router.push(`/admin/school/${schoolId}`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
+  }
 
   return (
     <div>
-      <AdminLayout>
+      <MainLayout>
         <div className={classNames(styles.wrapper)}>
           <div className={classNames(styles.filter)}>
             <Input
               type="text"
               color="primary"
               variant="bordered"
-              placeholder="Search schools ..."
+              placeholder="Search your plans ..."
               onChange={handleSearch}
               startContent={<FaSearch />}
               className="max-w-[40rem] transition-all pr-[1rem]"
             />
             <Pagination
-              total={schools.meta.totalPages}
+              total={plans?.meta?.totalPages || 0}
               initialPage={1}
               page={page}
               onChange={setPage}
@@ -267,13 +293,13 @@ const AdminSchool = () => {
             <Button
               startContent={<IoMdAdd />}
               className="w-[100%]"
-              onClick={handleOpenModalCreateSchool}
+              onClick={handleOpenModalCreatePlan}
             >
-              Add new school
+              Add new plan
             </Button>
           </div>
           <div className={classNames(styles.schools)}>
-            <Table aria-label="Example table with dynamic content">
+            <Table aria-label="Example table content">
               <TableHeader columns={columns}>
                 {(column) => (
                   <TableColumn key={column.key}>{column.label}</TableColumn>
@@ -281,16 +307,18 @@ const AdminSchool = () => {
               </TableHeader>
               <TableBody
                 emptyContent={"No rows to display."}
-                items={schools.items.map((item, index) => {
+                items={plans.items.map((item, index) => {
                   return {
                     key: `${index + 1}`,
                     no: `${index + 1}`,
                     ...item,
+                    createdAt: item.createdAt.toString(),
+                    updatedAt: item.updatedAt.toString(),
                   };
                 })}
               >
                 {(item) => (
-                  <TableRow key={item.key}>
+                  <TableRow key={item.id}>
                     {(columnKey) => (
                       <TableCell>{renderCell(item, columnKey)}</TableCell>
                     )}
@@ -302,14 +330,14 @@ const AdminSchool = () => {
         </div>
         <Modal
           size={"xl"}
-          isOpen={isOpenModalCreateSchool}
-          onClose={onCloseModalCreateSchool}
+          isOpen={isOpenModalCreatePlan}
+          onClose={onCloseModalCreatePlan}
         >
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Create new school
+                  Create new plan
                 </ModalHeader>
                 <ModalBody>
                   <Input
@@ -317,7 +345,7 @@ const AdminSchool = () => {
                     color="primary"
                     label="Name"
                     variant="underlined"
-                    onChange={handleCreateSchool}
+                    onChange={handleCreatePlan}
                   />
                 </ModalBody>
                 <ModalFooter>
@@ -326,7 +354,7 @@ const AdminSchool = () => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={handleSubmitCreateSchool}
+                    onPress={handleSubmitCreatePlan}
                     isLoading={isLoading}
                   >
                     Create
@@ -338,14 +366,14 @@ const AdminSchool = () => {
         </Modal>
         <Modal
           size={"xl"}
-          isOpen={isOpenModalEditSchool}
-          onClose={onCloseModalEditSchool}
+          isOpen={isOpenModalEditPlan}
+          onClose={onCloseModalEditPlan}
         >
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Edit school
+                  Edit plan
                 </ModalHeader>
                 <ModalBody>
                   <Input
@@ -353,7 +381,7 @@ const AdminSchool = () => {
                     color="primary"
                     label="Name"
                     variant="underlined"
-                    onChange={handleUpdateNameSchool}
+                    onChange={handleUpdatePlan}
                   />
                 </ModalBody>
                 <ModalFooter>
@@ -362,9 +390,7 @@ const AdminSchool = () => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={() =>
-                      handleSubmitUpdateSchool(updateSchool.schoolId)
-                    }
+                    onPress={() => handleSubmitUpdatePlan()}
                     isLoading={isLoading}
                   >
                     Save
@@ -376,17 +402,17 @@ const AdminSchool = () => {
         </Modal>
         <Modal
           size={"xl"}
-          isOpen={isOpenModalDeleteSchool}
-          onClose={onCloseModalDeleteSchool}
+          isOpen={isOpenModalDeletePlan}
+          onClose={onCloseModalDeletePlan}
         >
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  Delete school
+                  Delete plan
                 </ModalHeader>
                 <ModalBody>
-                  {`Are you sure you want to delete this school? This action cannot be undone.`}
+                  {`Are you sure you want to delete this plan? This action cannot be undone.`}
                 </ModalBody>
                 <ModalFooter>
                   <Button color="danger" variant="light" onPress={onClose}>
@@ -394,7 +420,7 @@ const AdminSchool = () => {
                   </Button>
                   <Button
                     color="primary"
-                    onPress={() => handleSubmitDeleteSchool(deleteSchool)}
+                    onPress={() => handleSubmitDeletePlan()}
                     isLoading={isLoading}
                   >
                     Confirm
@@ -404,9 +430,9 @@ const AdminSchool = () => {
             )}
           </ModalContent>
         </Modal>
-      </AdminLayout>
+      </MainLayout>
     </div>
   );
 };
 
-export default AdminSchool;
+export default Plan;

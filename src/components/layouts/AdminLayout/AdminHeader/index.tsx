@@ -9,25 +9,43 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  DropdownItem,
+  DropdownMenu,
+  Avatar,
+  Dropdown,
+  DropdownTrigger,
+  AvatarIcon,
 } from "@nextui-org/react";
 import { TbLogout } from "react-icons/tb";
 import { useRouter } from "next/router";
 import {
   getFromSessionStorage,
+  getUAdminAccessToken,
+  logout,
   SESSION_STORAGE_KEYS,
 } from "@/src/utils/sessionStorage";
 import { AcmeLogo } from "@/src/components/UI/AcmeLogo";
+import { ResponseAuthMe } from "@/src/api/response/auth";
+import { REQUEST } from "@/src/api/request";
 
 export default function AdminHeader() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const [navKey, setNavKey] = useState("");
+  const [user, setUser] = useState(new ResponseAuthMe());
   const [accessToken, setAccessToken] = useState(
     getFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY)
   );
 
   useEffect(() => {
-    if (!getFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY)) {
+    const accessToken = getUAdminAccessToken();
+    if (accessToken) {
+      REQUEST.AUTH_ME().then((res: any) => {
+        if (!res.message) {
+          setUser(res);
+        }
+      });
+    } else {
       router.push("/admin/login");
     }
   }, [accessToken, router]);
@@ -56,12 +74,17 @@ export default function AdminHeader() {
     };
   };
 
+  const handleLogout = () => {
+    logout();
+    router.reload();
+  };
+
   return (
     <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent className="hidden sm:flex gap-4" justify="start">
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">UNIPLAN</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -114,7 +137,7 @@ export default function AdminHeader() {
         ))}
       </NavbarMenu>
 
-      <NavbarContent justify="end">
+      {/* <NavbarContent justify="end">
         <NavbarItem>
           <Button
             as={Link}
@@ -124,6 +147,48 @@ export default function AdminHeader() {
             startContent={<TbLogout />}
           ></Button>
         </NavbarItem>
+      </NavbarContent> */}
+      <NavbarContent justify="end">
+        {(!getUAdminAccessToken() && (
+          <NavbarItem>
+            <Link href={"/auth/signin"} className="pr-[1rem]">
+              Login
+            </Link>
+            <Button as={Link} color="primary" href="#" variant="flat">
+              <Link href={"/auth/signup"}>Sign Up</Link>
+            </Button>
+          </NavbarItem>
+        )) || (
+          <NavbarItem>
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  icon={<AvatarIcon />}
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  classNames={{
+                    // base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B]",
+                    icon: "text-black/80",
+                  }}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="profile" className="h-14 gap-2">
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">{user.email}</p>
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  onClick={() => handleLogout()}
+                >
+                  Log Out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        )}
       </NavbarContent>
     </Navbar>
   );

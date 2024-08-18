@@ -69,7 +69,11 @@ const SignInForm = () => {
             SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
             data.refreshToken
           );
-          router.push("/");
+          if (window.history.length > 1) {
+            router.back();
+          } else {
+            router.push("/");
+          }
         }
       })
       .catch((error) => {
@@ -102,7 +106,11 @@ const SignInForm = () => {
             SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
             data.refreshToken
           );
-          router.push("/");
+          if (window.history.length > 1) {
+            router.back();
+          } else {
+            router.push("/");
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -119,7 +127,7 @@ const SignInForm = () => {
           shadow="lg"
         >
           <CardHeader className="flex-col uppercase text-2xl justify-center align-center">
-            <Button startContent={<AiFillHome/>} className="mr-auto mb-10">
+            <Button startContent={<AiFillHome />} className="mr-auto mb-10">
               <Link href={"/"}>Home</Link>
             </Button>
             <p className="font-bold">Sign In</p>

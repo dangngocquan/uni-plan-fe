@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Navbar,
   NavbarBrand,
@@ -11,21 +11,23 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
 } from "@nextui-org/react";
 import { AcmeLogo } from "../../../UI/AcmeLogo";
 import { useRouter } from "next/router";
-import {
-  getFromSessionStorage,
-  SESSION_STORAGE_KEYS,
-} from "@/src/utils/sessionStorage";
+import { getUserAccessToken, logout } from "@/src/utils/sessionStorage";
+import { REQUEST } from "@/src/api/request";
+import { ResponseAuthMe } from "@/src/api/response/auth";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
   const [navKey, setNavKey] = useState("");
-  const [accessToken, setAccessToken] = useState(
-    getFromSessionStorage(SESSION_STORAGE_KEYS.ACCESS_TOKEN_KEY)
-  );
+  const [refresh, setRefresh] = useState(true);
+  const [user, setUser] = useState(new ResponseAuthMe());
   const navigations = [
     {
       text: "Home",
@@ -49,6 +51,17 @@ export default function Header() {
     },
   ];
 
+  useEffect(() => {
+    const accessToken = getUserAccessToken();
+    if (accessToken) {
+      REQUEST.AUTH_ME().then((res: any) => {
+        if (!res.message) {
+          setUser(res);
+        }
+      });
+    }
+  }, [router]);
+
   const onClickNav = (navKey: string, link: string) => {
     return () => {
       if (link !== "#") {
@@ -58,12 +71,17 @@ export default function Header() {
     };
   };
 
+  const handleLogout = () => {
+    logout();
+    router.reload();
+  };
+
   return (
     <Navbar isBordered isMenuOpen={isMenuOpen} onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent className="hidden sm:flex gap-4" justify="start">
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">UNIPLAN</p>
         </NavbarBrand>
       </NavbarContent>
 
@@ -121,7 +139,7 @@ export default function Header() {
       </NavbarMenu>
 
       <NavbarContent justify="end">
-        {(!accessToken && (
+        {(!getUserAccessToken() && (
           <NavbarItem>
             <Link href={"/auth/signin"} className="pr-[1rem]">
               Login
@@ -132,13 +150,40 @@ export default function Header() {
           </NavbarItem>
         )) || (
           <NavbarItem>
-            <Avatar
-              icon={<AvatarIcon />}
-              classNames={{
-                base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B]",
-                icon: "text-black/80",
-              }}
-            />
+            <Dropdown placement="bottom-end">
+              <DropdownTrigger>
+                <Avatar
+                  icon={<AvatarIcon />}
+                  isBordered
+                  as="button"
+                  className="transition-transform"
+                  classNames={{
+                    // base: "bg-gradient-to-br from-[#FFB457] to-[#FF705B]",
+                    icon: "text-black/80",
+                  }}
+                />
+              </DropdownTrigger>
+              <DropdownMenu aria-label="Profile Actions" variant="flat">
+                <DropdownItem key="profile" className="h-14 gap-2">
+                  <p className="font-semibold">Signed in as</p>
+                  <p className="font-semibold">{user.email}</p>
+                </DropdownItem>
+                <DropdownItem
+                  key="my-plans"
+                  color="primary"
+                  onClick={() => {router.push('/plan')}}
+                >
+                  My Plans
+                </DropdownItem>
+                <DropdownItem
+                  key="logout"
+                  color="danger"
+                  onClick={() => handleLogout()}
+                >
+                  Log Out
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </NavbarItem>
         )}
       </NavbarContent>

@@ -3,3 +3,8 @@ export enum GroupCourseType {
   SINGLE_SELECT = "SINGLE_SELECT",
   MULTIPLE_SELECTION = "MULTIPLE_SELECTION",
 }
+
+export enum PLanStatus {
+  DRAFT = "DRAFT",
+  COMPLETED = "COMPLETED",
+}

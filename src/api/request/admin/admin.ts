@@ -35,12 +35,17 @@ export const adminAuthLogin = (data: RequestAdminAuthLogin) => {
   });
 };
 
-export const requestWithRefreshTokens = (request: Function) => {
+export const requestWithRefreshTokens = (
+  request: Function,
+  role: string = "ADMIN"
+) => {
   return request()
-    .then((res: any) => res.json())
+    .then((res: any) => {
+      return res.json();
+    })
     .then((data: any) => {
       if (data.message === "Invalid token") {
-        return refreshTokens("ADMIN").then((res) => {
+        return refreshTokens(role).then((res) => {
           return request().then((res: any) => res.json());
         });
       } else {
@@ -77,8 +82,7 @@ export const adminUpdateSchool = (data: RequestAdminUpdateSchool) => {
     body: JSON.stringify({
       name: `${data.name}`,
     }),
-  })
-    
+  });
 };
 
 export const adminDeleteSchool = (data: RequestAdminDeleteSchool) => {
@@ -91,8 +95,7 @@ export const adminDeleteSchool = (data: RequestAdminDeleteSchool) => {
         SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY
       )}`,
     },
-  })
-    
+  });
 };
 
 // ADMIN MAJOR
@@ -108,8 +111,7 @@ export const adminCreateMajor = (data: RequestAdminCreateMajor) => {
       )}`,
     },
     body: JSON.stringify(data),
-  })
-   
+  });
 };
 
 export const adminUpdateMajor = (data: RequestAdminUpdateMajor) => {
@@ -125,8 +127,7 @@ export const adminUpdateMajor = (data: RequestAdminUpdateMajor) => {
     body: JSON.stringify({
       name: `${data.name}`,
     }),
-  })
-    
+  });
 };
 
 export const adminDeleteMajor = (data: RequestAdminDeleteMajor) => {
@@ -139,8 +140,7 @@ export const adminDeleteMajor = (data: RequestAdminDeleteMajor) => {
         SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY
       )}`,
     },
-  })
-    
+  });
 };
 
 // ADMIN GROUP COURSE
@@ -173,8 +173,7 @@ export const adminCreateGroupCourseRelation = (
       )}`,
     },
     body: JSON.stringify(data),
-  })
-    
+  });
 };
 
 export const adminUpdateGroupCourse = (data: RequestAdminUpdateGroupCourse) => {
@@ -188,8 +187,7 @@ export const adminUpdateGroupCourse = (data: RequestAdminUpdateGroupCourse) => {
       )}`,
     },
     body: JSON.stringify(data),
-  })
-    
+  });
 };
 
 export const adminDeleteGroupCourse = (data: RequestAdminDeleteGroupCourse) => {
@@ -202,8 +200,7 @@ export const adminDeleteGroupCourse = (data: RequestAdminDeleteGroupCourse) => {
         SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY
       )}`,
     },
-  })
-    
+  });
 };
 
 // ADMIN COURSE
@@ -218,8 +215,7 @@ export const adminCreateCourse = async (data: RequestAdminCreateCourse) => {
       )}`,
     },
     body: JSON.stringify(data),
-  })
-    
+  });
 };
 
 export const adminCreateCourseRelation = (
@@ -235,8 +231,7 @@ export const adminCreateCourseRelation = (
       )}`,
     },
     body: JSON.stringify(data),
-  })
-    
+  });
 };
 
 export const adminUpdateCourse = (data: RequestAdminUpdateCourse) => {
@@ -250,7 +245,7 @@ export const adminUpdateCourse = (data: RequestAdminUpdateCourse) => {
       )}`,
     },
     body: JSON.stringify(data),
-  }) 
+  });
 };
 
 export const adminDeleteCourse = (data: RequestAdminDeleteCourse) => {
@@ -263,10 +258,12 @@ export const adminDeleteCourse = (data: RequestAdminDeleteCourse) => {
         SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY
       )}`,
     },
-  })
+  });
 };
 
-export const adminUpdateCourseRelation = (data: RequestAdminUpdateCourseRelation) => {
+export const adminUpdateCourseRelation = (
+  data: RequestAdminUpdateCourseRelation
+) => {
   return fetch(API_ROUTES.adminUpdateCourseRelation(data.courseRelationId), {
     method: "PUT",
     headers: {
@@ -277,10 +274,12 @@ export const adminUpdateCourseRelation = (data: RequestAdminUpdateCourseRelation
       )}`,
     },
     body: JSON.stringify(data),
-  }) 
+  });
 };
 
-export const adminDeleteCourseRelation = (data: RequestAdminDeleteCourseRelation) => {
+export const adminDeleteCourseRelation = (
+  data: RequestAdminDeleteCourseRelation
+) => {
   return fetch(API_ROUTES.adminDeleteCourseRelation(data.courseRelationId), {
     method: "DELETE",
     headers: {
@@ -290,5 +289,5 @@ export const adminDeleteCourseRelation = (data: RequestAdminDeleteCourseRelation
         SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY
       )}`,
     },
-  })
+  });
 };

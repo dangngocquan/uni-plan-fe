@@ -140,7 +140,7 @@ const SignUpForm = () => {
           shadow="lg"
         >
           <CardHeader className="flex-col uppercase text-2xl justify-center align-center">
-            <Button startContent={<AiFillHome/>} className="mr-auto mb-10">
+            <Button startContent={<AiFillHome />} className="mr-auto mb-10">
               <Link href={"/"}>Home</Link>
             </Button>
             <p className="font-bold">Sign Up</p>
