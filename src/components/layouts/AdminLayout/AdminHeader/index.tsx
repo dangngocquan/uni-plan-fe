@@ -20,7 +20,7 @@ import { TbLogout } from "react-icons/tb";
 import { useRouter } from "next/router";
 import {
   getFromSessionStorage,
-  getUAdminAccessToken,
+  getAdminAccessToken,
   logout,
   SESSION_STORAGE_KEYS,
 } from "@/src/utils/sessionStorage";
@@ -38,9 +38,9 @@ export default function AdminHeader() {
   );
 
   useEffect(() => {
-    const accessToken = getUAdminAccessToken();
+    const accessToken = getAdminAccessToken();
     if (accessToken) {
-      REQUEST.AUTH_ME().then((res: any) => {
+      REQUEST.AUTH_ME("ADMIN").then((res: any) => {
         if (!res.message) {
           setUser(res);
         }
@@ -149,7 +149,7 @@ export default function AdminHeader() {
         </NavbarItem>
       </NavbarContent> */}
       <NavbarContent justify="end">
-        {(!getUAdminAccessToken() && (
+        {(!getAdminAccessToken() && (
           <NavbarItem>
             <Link href={"/auth/signin"} className="pr-[1rem]">
               Login

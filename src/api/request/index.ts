@@ -35,6 +35,7 @@ import {
   deletePlan,
   deletePlanCourse,
   getPlanCourses,
+  getPlanDetail,
   getPlans,
   updatePlan,
   updatePlanCourse,
@@ -49,7 +50,7 @@ export const REQUEST = {
   AUTH_FORGOT_PASSWORD: authForgotPassword,
   AUTH_RESET_PASSWORD: authResetPassword,
   AUTH_REFRESH_TOKEN: authRefreshTokens,
-  AUTH_ME: () => requestWithRefreshTokens(() => authMe(), "USER"),
+  AUTH_ME: (role: string) => requestWithRefreshTokens(() => authMe(role), role),
 
   GET_SCHOOL: getSchool,
   GET_MAJORS: getMajors,
@@ -57,6 +58,8 @@ export const REQUEST = {
 
   GET_PLANS: (data: any) =>
     requestWithRefreshTokens(() => getPlans(data), "USER"),
+  GET_PLAN_DETAIL: (data: any) =>
+    requestWithRefreshTokens(() => getPlanDetail(data), "USER"),
   CREATE_PLAN: (data: any) =>
     requestWithRefreshTokens(() => createPlan(data), "USER"),
   UPDATE_PLAN: (data: any) =>
