@@ -9,6 +9,7 @@ import {
   RequestCreatePlanCourse,
   RequestDeletePlan,
   RequestDeletePlanCourse,
+  RequestPlanDetail,
   RequestUpdatePlan,
   RequestUpdatePlanCourse,
 } from "./dto";
@@ -128,6 +129,17 @@ export const updatePlanCourse = (data: RequestUpdatePlanCourse) => {
 export const deletePlanCourse = (data: RequestDeletePlanCourse) => {
   return fetch(API_ROUTES.deletePlanCourse(data.planCourseId), {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      authorization: `Bearer ${getUserAccessToken()}`,
+    },
+  });
+};
+
+export const getPlanDetail = (data: RequestPlanDetail) => {
+  return fetch(API_ROUTES.getPlanDetail(data.id), {
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",

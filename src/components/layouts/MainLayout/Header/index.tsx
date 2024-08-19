@@ -54,7 +54,7 @@ export default function Header() {
   useEffect(() => {
     const accessToken = getUserAccessToken();
     if (accessToken) {
-      REQUEST.AUTH_ME().then((res: any) => {
+      REQUEST.AUTH_ME("USER").then((res: any) => {
         if (!res.message) {
           setUser(res);
         }

@@ -54,7 +54,7 @@ export const refreshTokens = (role: string) => {
       SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY
     );
     if (refreshToken) {
-      REQUEST.AUTH_REFRESH_TOKEN(refreshToken)
+      return REQUEST.AUTH_REFRESH_TOKEN(refreshToken)
         .then((res) => res.json())
         .then((res) => {
           if (res.message) {
@@ -90,10 +90,10 @@ export const getUserAccessToken = () =>
 export const getUserRefreshToken = () =>
   getFromSessionStorage(SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY);
 
-export const getUAdminAccessToken = () =>
+export const getAdminAccessToken = () =>
   getFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY);
 
-export const getUAdminRefreshToken = () =>
+export const getAdminRefreshToken = () =>
   getFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_REFRESH_TOKEN_KEY);
 
 export const logout = () => {
@@ -101,4 +101,4 @@ export const logout = () => {
   removeFromSessionStorage(SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY);
   removeFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_ACCESS_TOKEN_KEY);
   removeFromSessionStorage(SESSION_STORAGE_KEYS.ADMIN_REFRESH_TOKEN_KEY);
-}
+};

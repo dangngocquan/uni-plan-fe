@@ -260,8 +260,8 @@ const Plan = () => {
     setIsLoading(false);
   };
 
-  const handleOpenDetails = (schoolId: string) => {
-    // router.push(`/admin/school/${schoolId}`);
+  const handleOpenDetails = (id: string) => {
+    router.push(`/plan/detail/${id}`);
   };
 
   if (isLoading) {
