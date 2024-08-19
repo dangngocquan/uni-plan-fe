@@ -387,7 +387,7 @@ const UserPlanDetails = (props: { planId: string | null }) => {
           <div className="py-[2rem] font-bold">{`Plan: ${data.name}`}</div>
           <div className={classNames(styles.content_9)}>
             <div className="flex w-[100%] flex-col justify-center">
-              <Tabs aria-label="Dynamic tabs" className="felx justify-center">
+              <Tabs aria-label="Dynamic tabs" className="flex justify-center align-center">
                 <Tab key={"list-course"} title={"List courses"}>
                   <div className={classNames(styles.courses)}>
                     <Table
@@ -418,9 +418,9 @@ const UserPlanDetails = (props: { planId: string | null }) => {
                     </Table>
                   </div>
                 </Tab>
-                <Tab key={"summary"} title={"Summary"}>
-                  <div className="flex justify-space-around flex-col gap-[2rem] py-[2rem]">
-                    <Card className="max-h-[10rem] min-w-[20rem]">
+                <Tab key={"summary"} title={"Summary"} className="flex flex-col justify-center align-center">
+                  <div className="flex justify-center flex-col gap-[2rem] py-[2rem] align-center m-auto">
+                    <Card className="max-h-[10rem] align-center">
                       <CardBody className="h-[100%]">
                         <p className="flex justify-between">
                           {`Total number of courses:`}
@@ -449,7 +449,7 @@ const UserPlanDetails = (props: { planId: string | null }) => {
 
                     <Table
                       aria-label="Example table with dynamic content"
-                      className="flex w-[100%] justify-center"
+                      className="flex justify-center min-w-[25rem]"
                     >
                       <TableHeader columns={columnsSummaryGrades}>
                         {(column) => (
