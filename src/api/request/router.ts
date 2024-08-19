@@ -19,6 +19,8 @@ const API_ROUTES = {
   getCourses: `${apiConfig.ROOT_API}/api/course`,
 
   getPlans: `${apiConfig.ROOT_API}/api/plan`,
+  getPlanDetail: (id: string) =>
+    `${apiConfig.ROOT_API}/api/plan/detail?id=${id}`,
   createPlan: `${apiConfig.ROOT_API}/api/plan`,
   updatePlan: (planId: string) => `${apiConfig.ROOT_API}/api/plan/${planId}`,
   deletePlan: (planId: string) => `${apiConfig.ROOT_API}/api/plan/${planId}`,

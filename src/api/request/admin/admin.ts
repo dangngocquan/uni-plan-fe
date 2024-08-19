@@ -44,9 +44,9 @@ export const requestWithRefreshTokens = (
       return res.json();
     })
     .then((data: any) => {
-      if (data.message === "Invalid token") {
+      if (data.message === "Invalid token" || data.message === "Unauthorized") {
         return refreshTokens(role).then((res) => {
-          return request().then((res: any) => res.json());
+          return request().then((res0: any) => res0.json());
         });
       } else {
         return data;

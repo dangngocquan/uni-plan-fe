@@ -38,7 +38,7 @@ export class RequestCreatePlanCourse {
 
 export class RequestUpdatePlanCourse {
   planCourseId: string;
-  letterGrade: string;
+  letterGrade: string | null;
 
   constructor() {
     this.planCourseId = "";
@@ -51,5 +51,13 @@ export class RequestDeletePlanCourse {
 
   constructor() {
     this.planCourseId = "";
+  }
+}
+
+export class RequestPlanDetail {
+  id: string;
+
+  constructor() {
+    this.id = "";
   }
 }

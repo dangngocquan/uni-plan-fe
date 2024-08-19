@@ -1,13 +1,18 @@
-import { getUserAccessToken } from "@/src/utils/sessionStorage";
+import {
+  getAdminAccessToken,
+  getUserAccessToken,
+} from "@/src/utils/sessionStorage";
 import API_ROUTES from "./router";
 
-export const authMe = () => {
+export const authMe = (role: string) => {
   return fetch(API_ROUTES.authMe, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
-      authorization: `Bearer ${getUserAccessToken()}`,
+      authorization: `Bearer ${
+        role === "ADMIN" ? getAdminAccessToken() : getUserAccessToken()
+      }`,
     },
   });
 };
