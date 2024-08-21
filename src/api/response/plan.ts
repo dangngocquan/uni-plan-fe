@@ -59,14 +59,15 @@ export class GradeStatus {
   no: number;
   grade: string;
   count: number;
+  creditCount: number;
 
   constructor() {
     this.no = 0;
     this.grade = "";
     this.count = 0;
+    this.creditCount = 0;
   }
 }
-
 
 export class ResponsePlanSummary {
   totalCourses: number;
@@ -86,13 +87,70 @@ export class ResponsePlanSummary {
   }
 }
 
+export class ResponseGradeCPAStatus {
+  minCPA: number;
+  minRoundCPA: number;
+  maxCPA: number;
+  maxRoundCPA: number;
+  calculatorCPA: {
+    grade: string;
+    status: string;
+    fourPointGrade: number;
+    label: string;
+    details: {
+      case1: {
+        id: string;
+        fromTenPointGrade: number;
+        toTenPointGrade: number;
+        labelTenPointGrade: string;
+        fourPointGrade: number;
+        letterGrade: string;
+        conversionTableId: string;
+        count: number;
+      }[];
+      case2: {
+        id: string;
+        fromTenPointGrade: number;
+        toTenPointGrade: number;
+        labelTenPointGrade: string;
+        fourPointGrade: number;
+        letterGrade: string;
+        conversionTableId: string;
+        count: number;
+      }[];
+    };
+  }[];
+
+  constructor() {
+    this.minCPA = 0;
+    this.minRoundCPA = 0;
+    this.maxCPA = 4;
+    this.maxRoundCPA = 4;
+    this.calculatorCPA = [];
+  }
+}
+
+export class ResponseCPAStatus {
+  currentCPA: number;
+  withImprovements: ResponseGradeCPAStatus;
+  withoutImprovements: ResponseGradeCPAStatus;
+
+  constructor() {
+    this.currentCPA = 0;
+    this.withImprovements = new ResponseGradeCPAStatus();
+    this.withoutImprovements = new ResponseGradeCPAStatus();
+  }
+}
+
 export class ResponsePlanDetail extends ResponsePlan {
   courses: ResponsePlanCourse[];
   summary: ResponsePlanSummary;
+  cpaStatus: ResponseCPAStatus;
 
   constructor() {
     super();
     this.courses = [];
     this.summary = new ResponsePlanSummary();
+    this.cpaStatus = new ResponseCPAStatus();
   }
 }
