@@ -10,6 +10,7 @@ import {
   Button,
   Card,
   CardBody,
+  Checkbox,
   Modal,
   ModalBody,
   ModalContent,
@@ -38,12 +39,12 @@ import {
   RequestUpdatePlanCourse,
 } from "@/src/api/request/plan/dto";
 import { LetterGrade } from "@/src/utils/enums";
-import { title } from "process";
 
 const UserPlanDetails = (props: { planId: string | null }) => {
   const router = useRouter();
   const [tableData, setTableData] = useState<any[]>();
   const [isLoading, setIsLoading] = useState(false);
+  const [isImprovement, setIsImprovement] = useState(true);
   const [data, setData] = useState(new ResponsePlanDetail());
   const [updatePlanCourse, setUpdatePlanCourse] = useState(
     new RequestUpdatePlanCourse()
@@ -123,6 +124,29 @@ const UserPlanDetails = (props: { planId: string | null }) => {
     {
       key: "count",
       label: "COUNT",
+    },
+    {
+      key: "creditCount",
+      label: "CREDIT COUNT",
+    },
+  ];
+
+  const columnsCPAStatus = [
+    {
+      key: "grade",
+      label: "GRADE",
+    },
+    {
+      key: "range",
+      label: "RANGE",
+    },
+    {
+      key: "status",
+      label: "STATUS",
+    },
+    {
+      key: "cases",
+      label: "CASES",
     },
   ];
 
@@ -270,6 +294,7 @@ const UserPlanDetails = (props: { planId: string | null }) => {
         no: number;
         grade: string;
         count: number;
+        creditCount: number;
       },
       columnKey: React.Key
     ) => {
@@ -290,6 +315,118 @@ const UserPlanDetails = (props: { planId: string | null }) => {
           return (
             <div className="flex flex-col">
               <p className="text-bold text-sm">{item.count}</p>
+            </div>
+          );
+        case "creditCount":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm">{item.creditCount}</p>
+            </div>
+          );
+        default:
+          return "";
+      }
+    },
+    []
+  );
+
+  const renderCellCAPStatus = React.useCallback(
+    (
+      item: {
+        grade: string;
+        label: string;
+        status: string;
+        details: {
+          case1: {
+            id: string;
+            fromTenPointGrade: number;
+            toTenPointGrade: number;
+            labelTenPointGrade: string;
+            fourPointGrade: number;
+            letterGrade: string;
+            conversionTableId: string;
+            count: number;
+          }[];
+          case2: {
+            id: string;
+            fromTenPointGrade: number;
+            toTenPointGrade: number;
+            labelTenPointGrade: string;
+            fourPointGrade: number;
+            letterGrade: string;
+            conversionTableId: string;
+            count: number;
+          }[];
+        };
+      },
+      columnKey: React.Key
+    ) => {
+      switch (columnKey) {
+        case "grade":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm">{item.grade}</p>
+            </div>
+          );
+        case "range":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm">{item.label}</p>
+            </div>
+          );
+        case "status":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm">
+                {item.status === "DONE"
+                  ? "Already Completed"
+                  : item.status === "IS_POSSIBLE"
+                  ? "Possible"
+                  : "Impossible"}
+              </p>
+            </div>
+          );
+        case "cases":
+          return (
+            <div className="flex flex-col">
+              <p className="text-bold text-sm">
+                {item.details.case1.length === 0 ? (
+                  ""
+                ) : (
+                  <Tabs
+                    aria-label="Dynamic tabs"
+                    // className="flex justify-center align-center"
+                    size="sm"
+                  >
+                    <Tab key={1} title="Case 1">
+                      {item.details.case1.map((e, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="flex justify-between gap-[1rem] w-[15rem]"
+                          >
+                            <div>{`Grade: ${e["letterGrade"]}`}</div>
+                            <div>{`Requirement: ${e["count"]} credits`}</div>
+                          </div>
+                        );
+                      })}
+                    </Tab>
+                    <Tab key={2} title="Case 2">
+                      {item.details.case2.map((e, index) => {
+                        return (
+                          <div
+                            key={index}
+                            className="flex justify-between gap-[1rem]  w-[15rem]"
+                          >
+                            <div>{`Grade: ${e["letterGrade"]}`}</div>
+                            <div>{`Requirement: ${e["count"]} credits`}</div>
+                          </div>
+                        );
+                      })}
+                    </Tab>
+                  </Tabs>
+                )}
+              </p>
             </div>
           );
         default:
@@ -325,7 +462,6 @@ const UserPlanDetails = (props: { planId: string | null }) => {
   };
 
   const handleUpdatePlanCourse = (e: Key | null, field: string) => {
-    console.log({ updatePlanCourse });
     const value = e ? e.toString() : null;
     if (field === "grade") {
       setUpdatePlanCourse({
@@ -387,7 +523,10 @@ const UserPlanDetails = (props: { planId: string | null }) => {
           <div className="py-[2rem] font-bold">{`Plan: ${data.name}`}</div>
           <div className={classNames(styles.content_9)}>
             <div className="flex w-[100%] flex-col justify-center">
-              <Tabs aria-label="Dynamic tabs" className="flex justify-center align-center">
+              <Tabs
+                aria-label="Dynamic tabs"
+                className="flex justify-center align-center"
+              >
                 <Tab key={"list-course"} title={"List courses"}>
                   <div className={classNames(styles.courses)}>
                     <Table
@@ -418,7 +557,11 @@ const UserPlanDetails = (props: { planId: string | null }) => {
                     </Table>
                   </div>
                 </Tab>
-                <Tab key={"summary"} title={"Summary"} className="flex flex-col justify-center align-center">
+                <Tab
+                  key={"summary"}
+                  title={"Summary"}
+                  className="flex flex-col justify-center align-center"
+                >
                   <div className="flex justify-center flex-col gap-[2rem] py-[2rem] align-center m-auto">
                     <Card className="max-h-[10rem] align-center">
                       <CardBody className="h-[100%]">
@@ -467,6 +610,237 @@ const UserPlanDetails = (props: { planId: string | null }) => {
                             {(columnKey) => (
                               <TableCell>
                                 {renderCellSummaryGrades(item, columnKey)}
+                              </TableCell>
+                            )}
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </Tab>
+
+                <Tab key={"cpa-details"} title={"CPA Details"}>
+                  <div className={classNames(styles.courses)}>
+                    <Checkbox
+                      isSelected={isImprovement}
+                      onChange={() => setIsImprovement(!isImprovement)}
+                      className="mx-auto"
+                      size="sm"
+                    >
+                      Improvement
+                    </Checkbox>
+                    <div className="flex flex-col items-center">
+                      {/* {data.cpaStatus.withoutImprovements.calculatorCPA.map(
+                        (e, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="flex flex-col items-center"
+                            >
+                              <div className="border-l-2 border-black h-32"></div>
+                              <div className="relative my-1">
+                                <div className="w-3 h-3 bg-black rounded-full"></div>
+                                <div className="absolute top-1/2 left-full border-t-2 border-black w-[3rem] ml-1"></div>
+                              </div>
+                            </div>
+                          );
+                        }
+                      )} */}
+                      <div className="relative min-w-[50rem] h-[10rem] bg-gray-300 mt-[11.5rem]">
+                        {data.cpaStatus.withImprovements.calculatorCPA.map(
+                          (e) => {
+                            return (
+                              <div
+                                key={e.grade}
+                                className="absolute top-0 w-[1.5px] h-[110%] bg-blue-600"
+                                style={{
+                                  left: `${(e.fourPointGrade / 4.0) * 100}%`,
+                                }}
+                              ></div>
+                            );
+                          }
+                        )}
+                        <div
+                          className="absolute top-0 w-[1.5px] h-[110%] bg-blue-600"
+                          style={{ left: `100%` }}
+                        ></div>
+                        <div
+                          key={"min-cpa"}
+                          className="absolute top-[-40%] w-[1.5px] h-[250%] bg-red-600"
+                          style={{
+                            left: `${
+                              ((isImprovement
+                                ? data.cpaStatus.withImprovements.minCPA
+                                : data.cpaStatus.withoutImprovements.minCPA) /
+                                4.0) *
+                              100
+                            }%`,
+                          }}
+                        ></div>
+                        <div
+                          key={"current-cpa"}
+                          className="absolute top-[-70%] w-[1.5px] h-[250%] bg-red-600"
+                          style={{
+                            left: `${(data.summary.currentCPA / 4.0) * 100}%`,
+                          }}
+                        ></div>
+                        <div
+                          key={"max-cpa"}
+                          className="absolute top-[-100%] w-[1.5px] h-[250%] bg-red-600"
+                          style={{
+                            left: `${
+                              ((isImprovement
+                                ? data.cpaStatus.withImprovements.maxCPA
+                                : data.cpaStatus.withoutImprovements.maxCPA) /
+                                4.0) *
+                              100
+                            }%`,
+                          }}
+                        ></div>
+                      </div>
+
+                      <div className="relative mt-[1rem] min-w-[50rem]">
+                        {data.cpaStatus.withImprovements.calculatorCPA.map(
+                          (e) => {
+                            return (
+                              <span
+                                key={e.fourPointGrade}
+                                className="absolute transform -translate-x-1"
+                                style={{
+                                  left: `${(e.fourPointGrade / 4.0) * 100}%`,
+                                }}
+                              >
+                                {e.fourPointGrade}
+                              </span>
+                            );
+                          }
+                        )}
+                        <span
+                          className="absolute transform translate-x-0"
+                          style={{
+                            left: `100%`,
+                          }}
+                        >
+                          4.0
+                        </span>
+                        <span
+                          key={"current-cpa"}
+                          className="absolute transform -translate-x-[2rem] -translate-y-[26rem] mt-[10rem]"
+                          style={{
+                            left: `${
+                              ((isImprovement
+                                ? data.cpaStatus.withImprovements.minCPA
+                                : data.cpaStatus.withoutImprovements.minCPA) /
+                                4.0) *
+                              100
+                            }%`,
+                          }}
+                        >
+                          {"Min"}
+                        </span>
+                        <span
+                          key={"current-cpa"}
+                          className="absolute transform -translate-x-1 mt-[10rem]"
+                          style={{
+                            left: `${
+                              ((isImprovement
+                                ? data.cpaStatus.withImprovements.minCPA
+                                : data.cpaStatus.withoutImprovements.minCPA) /
+                                4.0) *
+                              100
+                            }%`,
+                          }}
+                        >
+                          {Math.round(
+                            (isImprovement
+                              ? data.cpaStatus.withImprovements.minCPA
+                              : data.cpaStatus.withoutImprovements.minCPA) *
+                              1000
+                          ) / 1000}
+                        </span>
+
+                        <span
+                          key={"current-cpa"}
+                          className="absolute transform -translate-x-[3.5rem] -translate-y-[26rem] mt-[7rem]"
+                          style={{
+                            left: `${(data.summary.currentCPA / 4.0) * 100}%`,
+                          }}
+                        >
+                          {"Current"}
+                        </span>
+                        <span
+                          key={"current-cpa"}
+                          className="absolute transform -translate-x-1 mt-[7rem]"
+                          style={{
+                            left: `${(data.summary.currentCPA / 4.0) * 100}%`,
+                          }}
+                        >
+                          {Math.round(data.summary.currentCPA * 10000) / 10000}
+                        </span>
+
+                        <span
+                          key={"current-cpa"}
+                          className="absolute transform -translate-x-[2rem] -translate-y-[26rem] mt-[4rem]"
+                          style={{
+                            left: `${
+                              ((isImprovement
+                                ? data.cpaStatus.withImprovements.maxCPA
+                                : data.cpaStatus.withoutImprovements.maxCPA) /
+                                4.0) *
+                              100
+                            }%`,
+                          }}
+                        >
+                          {"Max"}
+                        </span>
+                        <span
+                          key={"current-cpa"}
+                          className="absolute transform -translate-x-1 mt-[4rem]"
+                          style={{
+                            left: `${
+                              ((isImprovement
+                                ? data.cpaStatus.withImprovements.maxCPA
+                                : data.cpaStatus.withoutImprovements.maxCPA) /
+                                4.0) *
+                              100
+                            }%`,
+                          }}
+                        >
+                          {Math.round(
+                            (isImprovement
+                              ? data.cpaStatus.withImprovements.maxCPA
+                              : data.cpaStatus.withoutImprovements.maxCPA) *
+                              1000
+                          ) / 1000}
+                        </span>
+                      </div>
+                    </div>
+
+                    <Table
+                      aria-label="Example table with dynamic content"
+                      className="flex justify-center min-w-[25rem] mt-[15rem] mb-[5rem]"
+                    >
+                      <TableHeader columns={columnsCPAStatus}>
+                        {(column) => (
+                          <TableColumn key={column.key}>
+                            {column.label}
+                          </TableColumn>
+                        )}
+                      </TableHeader>
+                      <TableBody
+                        emptyContent={"No rows to display."}
+                        items={
+                          (isImprovement
+                            ? data.cpaStatus.withImprovements.calculatorCPA
+                            : data.cpaStatus.withoutImprovements
+                                .calculatorCPA) || []
+                        }
+                      >
+                        {(item) => (
+                          <TableRow key={item.grade}>
+                            {(columnKey) => (
+                              <TableCell>
+                                {renderCellCAPStatus(item, columnKey)}
                               </TableCell>
                             )}
                           </TableRow>

@@ -16,7 +16,7 @@ const HeroSection = () => {
           educational goals effortlessly.
         </p>
         <Button color="secondary" variant="shadow" className="h-[4rem] w-[15rem] transition-all">
-          <Link href={"#"} className="text-xl font-bold">Explore now</Link>
+          <Link href={"/plan"} className="text-xl font-bold">Explore now</Link>
         </Button>
         
     </div>

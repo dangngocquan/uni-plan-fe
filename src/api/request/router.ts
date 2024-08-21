@@ -64,6 +64,12 @@ const API_ROUTES = {
     `${apiConfig.ROOT_API}/api/admin/courseRelation/${courseRelationId}`,
   adminDeleteCourseRelation: (courseRelationId: string) =>
     `${apiConfig.ROOT_API}/api/admin/courseRelation/${courseRelationId}`,
+
+  adminCreateGradeConversionTable: `${apiConfig.ROOT_API}/api/admin/grade-conversion-table`,
+  adminUpdateGradeConversionTable: (id: string) =>
+    `${apiConfig.ROOT_API}/api/admin/grade-conversion-table/${id}`,
+  adminDeleteGradeCOnversionTable: (id: string) =>
+    `${apiConfig.ROOT_API}/api/admin/grade-conversion-table/${id}`,
 };
 
 export default API_ROUTES;
