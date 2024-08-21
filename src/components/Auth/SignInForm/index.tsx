@@ -69,11 +69,16 @@ const SignInForm = () => {
             SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
             data.refreshToken
           );
-          if (window.history.length > 1) {
-            router.back();
-          } else {
-            router.push("/");
-          }
+          // if (window.history.length > 1) {
+          //   router.back();
+          //   console.log(router.asPath);
+          //   // if (router.asPath.includes("auth")) {
+          //   router.push("/");
+          //   // }
+          //   router.reload();
+          // } else {
+          router.push("/");
+          // }
         }
       })
       .catch((error) => {
@@ -106,11 +111,15 @@ const SignInForm = () => {
             SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
             data.refreshToken
           );
-          if (window.history.length > 1) {
-            router.back();
-          } else {
-            router.push("/");
-          }
+          // if (window.history.length > 1) {
+          //   router.back();
+          //   if (router.asPath.includes("auth")) {
+          //     router.push("/");
+          //   }
+          //   router.reload();
+          // } else {
+          router.push("/");
+          // }
         })
         .catch((error) => {
           console.log(error);

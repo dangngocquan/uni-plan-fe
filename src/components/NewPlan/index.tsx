@@ -35,11 +35,14 @@ import { RequestCreatePlan } from "@/src/api/request/plan/dto";
 import { ResponsePlan } from "@/src/api/response/plan";
 import { PLanStatus } from "@/src/utils/enums";
 
-const NewPlan = () => {
+const NewPlan = (props: { majorId: string | null }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState("step-1"); // "m-1-step-2", "m-1-step-3"
-  const [meta, setMeta] = useState({ schoolId: "", majorId: "" });
+  const [step, setStep] = useState(props.majorId ? "m-1-step-4" : "step-1"); // "m-1-step-2", "m-1-step-3"
+  const [meta, setMeta] = useState({
+    schoolId: "",
+    majorId: props.majorId ? String(props.majorId) : "",
+  });
   const [selectedCourseIds, setSelectedCourseIds] = useState<string[]>([]);
   const [createPlan, setCreatePlan] = useState(new RequestCreatePlan());
 
@@ -498,7 +501,7 @@ const NewPlan = () => {
                   <Button
                     color="secondary"
                     onPress={() => {
-                      setStep("m-1-step-3");
+                      setStep(meta.schoolId? "m-1-step-3" :  "m-1-step-2");
                     }}
                   >
                     Previous step
