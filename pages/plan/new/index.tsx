@@ -12,7 +12,7 @@ const PlanNewPage = dynamic(() => import("@/src/components/NewPlan"), {
 export default function HomePlanNewPage() {
   return (
     <div>
-      <PlanNewPage></PlanNewPage>
+      <PlanNewPage majorId={null}></PlanNewPage>
     </div>
   );
 }

@@ -34,21 +34,21 @@ export default function Header() {
       link: "/",
     },
     {
-      text: "Features",
-      link: "#",
+      text: "Plans",
+      link: "/plan",
     },
     {
       text: "Schools",
       link: "/school",
     },
-    {
-      text: "About",
-      link: "#",
-    },
-    {
-      text: "Contact",
-      link: "#",
-    },
+    // {
+    //   text: "About",
+    //   link: "#",
+    // },
+    // {
+    //   text: "Contact",
+    //   link: "#",
+    // },
   ];
 
   useEffect(() => {
