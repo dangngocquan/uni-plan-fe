@@ -5,18 +5,12 @@ const Footer = () => {
   return (
     <div className={classNames(styles.wrapper)}>
       <div className={classNames(styles.textFooter)}>
-      Copyright © 2024 by Uni Plan. All Rights Reserved.
+        Copyright © 2024 by Uni Plan. All Rights Reserved.
       </div>
       <div className={classNames(styles.actions)}>
-        <div className={classNames(styles.action)}>
-        Privacy Policy
-        </div>
-        <div className={classNames(styles.action)}>
-        Terms of Services
-        </div>
-        <div className={classNames(styles.action)}>
-        Contact Us
-        </div>
+        <div className={classNames(styles.action)}>Privacy Policy</div>
+        <div className={classNames(styles.action)}>Terms of Services</div>
+        <div className={classNames(styles.action)}>Contact Us</div>
       </div>
     </div>
   );

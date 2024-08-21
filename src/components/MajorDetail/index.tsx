@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { REQUEST } from "@/src/api/request";
 import {
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -16,6 +17,7 @@ import { ResponseMajorDetail } from "@/src/api/response/major";
 import { NO_I } from "@/src/utils/helper";
 import { ResponseGroupCourseDetails } from "@/src/api/response";
 import MainLayout from "../layouts/MainLayout";
+import { IoMdAdd } from "react-icons/io";
 
 const UserMajorDetails = (props: { majorId: string | null }) => {
   const router = useRouter();
@@ -235,6 +237,16 @@ const UserMajorDetails = (props: { majorId: string | null }) => {
       <MainLayout>
         <div className={classNames(styles.wrapper)}>
           <div className={classNames(styles.majors)}>
+            <Button
+              startContent={<IoMdAdd />}
+              color="primary"
+              className="w-[17rem] mb-[1rem]"
+              onClick={() => {
+                router.push(`/plan/new/${majorId}`);
+              }}
+            >
+              Create new plan with this major
+            </Button>
             <Table aria-label="Example table with dynamic content">
               <TableHeader columns={columns}>
                 {(column) => (

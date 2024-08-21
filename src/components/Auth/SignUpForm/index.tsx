@@ -123,7 +123,15 @@ const SignUpForm = () => {
             SESSION_STORAGE_KEYS.REFRESH_TOKEN_KEY,
             data.refreshToken
           );
-          router.push("/");
+          // if (window.history.length > 1) {
+          //   router.back();
+          //   if (router.asPath.includes("auth")) {
+          //     router.push("/");
+          //   }
+          //   router.reload();
+          // } else {
+            router.push("/");
+          // }
         })
         .catch((error) => {
           console.log(error);

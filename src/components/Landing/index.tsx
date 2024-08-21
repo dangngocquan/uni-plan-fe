@@ -10,7 +10,7 @@ const LandingPage = () => {
     <div className={classNames(styles.wrapper)}>
       <MainLayout>
         <HeroSection />
-        <About/>
+        {/* <About/> */}
       </MainLayout>
     </div>
   );
