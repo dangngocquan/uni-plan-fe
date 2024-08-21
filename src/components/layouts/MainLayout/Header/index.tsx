@@ -114,7 +114,7 @@ export default function Header() {
       <NavbarContent className="sm:hidden pr-3" justify="center">
         <NavbarBrand>
           <AcmeLogo />
-          <p className="font-bold text-inherit">ACME</p>
+          <p className="font-bold text-inherit">UNIPLAN</p>
         </NavbarBrand>
       </NavbarContent>
 
