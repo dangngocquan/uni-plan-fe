@@ -82,7 +82,7 @@ const MajorPage = (props: { schoolId: string | null }) => {
                 >
                   <Card
                     key={e.id}
-                    className="h-[7rem] w-[20rem] cursor-pointer"
+                    className="w-[100%] h-[100%] cursor-pointer"
                   >
                     <CardHeader className="justify-center text-3xl">
                       <TbActivity />
